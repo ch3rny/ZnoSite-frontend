@@ -39,7 +39,10 @@ export default {
       this.$store.commit("znoSelection/setThemes", []);
       this.$store.commit("znoSelection/setType", []);
       this.$store.commit("znoTimer/setEndTime");
-      this.$router.push({ name: "ZnoSolving" });
+      this.$router.push({
+        name: "ZnoSolving",
+        params: { year: year, znotype: type },
+      });
     },
     getTitle(type) {
       var desc = "";

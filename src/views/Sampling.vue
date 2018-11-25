@@ -3,7 +3,7 @@
     <div>
       <p class="title font-weight-medium">Створіть власний тест за наступними параметрами:</p>
     </div>
-    <v-layout row wrap>
+    <v-layout row wrap="">
       <v-flex xs12 sm6 md4 lg4>
         <div>
           <v-subheader>Оберіть роки</v-subheader>
@@ -68,7 +68,11 @@
         bottom
         right
         fab
-        :to="{ name: 'TestSolving', params: { mode: 'sampling'} }"
+        :to="{ name: 'TestSolving', 
+        query: {years: checkedYears, 
+        themes: checkedThemes,
+        znotypes: checkedZnoTypes, 
+        types: checkedTypes} }"
       >
         <v-icon>arrow_forward</v-icon>
       </v-btn>
@@ -85,7 +89,7 @@ import { createHelpers } from "vuex-map-fields";
 
 const { mapFields } = createHelpers({
   getterType: "znoSelection/getField",
-  mutationType: "znoSelection/updateField"
+  mutationType: "znoSelection/updateField",
 });
 
 export default {
@@ -94,7 +98,7 @@ export default {
       THEMES,
       TYPES,
       ZNO_TYPES,
-      YEARS
+      YEARS,
     };
   },
   computed: {
@@ -102,9 +106,9 @@ export default {
       "checkedYears",
       "checkedThemes",
       "checkedTypes",
-      "checkedZnoTypes"
-    ])
-  }
+      "checkedZnoTypes",
+    ]),
+  },
 };
 </script>
 

@@ -188,6 +188,9 @@ export default {
     pagesTotal() {
       return Math.ceil(this.tasks.length / this.pageSize);
     },
+    qqq() {
+      return this.$route.query;
+    },
   },
   methods: {
     checkSolving(value, index) {
@@ -244,6 +247,7 @@ export default {
   updated() {
     this.loading = false;
     if (this.tasks.length == 0) this.$router.push({ name: "Empty" });
+    console.log(this.qqq);
   },
 };
 </script>
