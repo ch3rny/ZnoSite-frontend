@@ -26,12 +26,12 @@ export default new Router({
       component: Sampling
     },
     {
-      path: "/test-solving",
+      path: "/test/",
       name: "TestSolving",
       component: TestSolving,
     },
     {
-      path: "/zno-solving",
+      path: "/zno/:year-:znotype/",
       name: "ZnoSolving",
       component: ZnoSolving
     },
@@ -64,7 +64,7 @@ export default new Router({
       path: "/bundle/:id/edit",
       name: "BundleEdit",
       component: BundleEdit,
-      
+
     }
   ]
 });

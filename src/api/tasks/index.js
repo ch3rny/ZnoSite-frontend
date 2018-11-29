@@ -7,9 +7,13 @@ import {
 const getTasks = (years, themes, types, znoTypes) => axios.get(
 	`${URL}tasks/?year__in=${years}&theme__name__in=${themes}&type__in=${types}&zno_type__in=${znoTypes}`
 );
+const getZno = (years, znoTypes) => axios.get(
+	`${URL}tasks/?year__in=${years}&zno_type__in=${znoTypes}`
+);
 const getBundleTasks = (tasks) => axios.get(`${URL}tasks/?id__in=${tasks}`);
 
 export default {
 	getTasks,
+	getZno,
 	getBundleTasks
 }

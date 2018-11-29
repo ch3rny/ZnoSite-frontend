@@ -3,7 +3,7 @@
     <div>
       <p class="title font-weight-medium">Оберіть тест ЗНО:</p>
     </div>
-    <v-layout row wrap="">
+    <v-layout row wrap>
       <v-flex
         xs6
         sm4
@@ -29,20 +29,19 @@ import ZNO_LIST from "@/constants/ZnoList";
 export default {
   data() {
     return {
-      ZNO_LIST,
+      ZNO_LIST
     };
   },
   methods: {
     goToZnoSolving(year, type) {
-      this.$store.commit("znoSelection/setYear", [year]);
-      this.$store.commit("znoSelection/setZnoType", [type]);
-      this.$store.commit("znoSelection/setThemes", []);
-      this.$store.commit("znoSelection/setType", []);
       this.$store.commit("znoTimer/setEndTime");
-      this.$router.push({ name: "ZnoSolving" });
+      this.$router.push({
+        name: "ZnoSolving",
+        params: { year: year, znotype: type }
+      });
     },
     getTitle(type) {
-      var desc = "";
+      let desc;
       switch (type) {
         case 1:
           desc = "Основна сесія";
@@ -55,8 +54,8 @@ export default {
           break;
       }
       return desc;
-    },
-  },
+    }
+  }
 };
 </script>
 
