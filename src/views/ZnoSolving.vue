@@ -2,7 +2,7 @@
   <v-container class="noPadding" grid-list-md>
     <v-layout
       row
-      wrap=""
+      wrap
       justify-center
       v-touch="{
         left: () => nextTask(),
@@ -11,7 +11,7 @@
     >
       <Loader :loading="loading"/>
       <v-flex d-flex xs12 md10 lg9 class="card__wrapper">
-        <v-layout justify-center wrap="">
+        <v-layout justify-center wrap>
           <div v-for="n in tasks.length" :key="n" @click="changeTask(n)">
             <div
               v-ripple
@@ -104,7 +104,7 @@
           </div>
         </v-card>
         <div class="card__wrapper">
-          <v-layout row wrap="">
+          <v-layout row wrap>
             <v-flex xs6>
               <v-btn
                 round
@@ -148,21 +148,15 @@ import ZnoDescription from "../components/ZnoDescription.vue";
 import AnswerBlock from "../components/AnswerBlock.vue";
 import ZnoResult from "../components/ZnoResult.vue";
 import Loader from "../components/Loader.vue";
-import { createHelpers } from "vuex-map-fields";
 import { ROOT_URL } from "@/constants/Const";
 import api from "@/api";
-
-const { mapFields } = createHelpers({
-  getterType: "znoSelection/getField",
-  mutationType: "znoSelection/updateField",
-});
 
 export default {
   components: {
     ZnoDescription,
     AnswerBlock,
     ZnoResult,
-    Loader,
+    Loader
   },
   data() {
     return {
@@ -176,19 +170,13 @@ export default {
       totalScore: 0,
       loading: true,
       now: 0,
-      timer: null,
+      timer: null
     };
   },
   computed: {
-    ...mapFields([
-      "checkedYears",
-      "checkedThemes",
-      "checkedTypes",
-      "checkedZnoTypes",
-    ]),
     endTime() {
       return this.$store.state.znoTimer.endTime;
-    },
+    }
   },
   methods: {
     timer_loop() {
@@ -262,19 +250,14 @@ export default {
       //     this.totalScore += this.userAnswersScore[i];
       //   }
       // }
-    },
+    }
   },
   created() {
     this.timer_loop();
   },
   mounted() {
     api.tasks
-      .getTasks(
-        this.checkedYears,
-        this.checkedThemes,
-        this.checkedTypes,
-        this.checkedZnoTypes
-      )
+      .getZno(this.$route.params.year, this.$route.params.znotype)
       .then(res => (this.tasks = res.data));
   },
   updated() {
@@ -284,7 +267,7 @@ export default {
   beforeDestroy() {
     clearTimeout(this.timer);
     this.$store.commit("znoTimer/resetEndTime");
-  },
+  }
 };
 </script>
 

@@ -85,12 +85,6 @@ import THEMES from "@/constants/Themes";
 import YEARS from "@/constants/Years";
 import TYPES from "@/constants/Types";
 import ZNO_TYPES from "@/constants/ZnoTypes";
-import { createHelpers } from "vuex-map-fields";
-
-const { mapFields } = createHelpers({
-  getterType: "znoSelection/getField",
-  mutationType: "znoSelection/updateField",
-});
 
 export default {
   data() {
@@ -99,15 +93,11 @@ export default {
       TYPES,
       ZNO_TYPES,
       YEARS,
+      checkedYears: [],
+      checkedThemes: [],
+      checkedTypes: [],
+      checkedZnoTypes: [],
     };
-  },
-  computed: {
-    ...mapFields([
-      "checkedYears",
-      "checkedThemes",
-      "checkedTypes",
-      "checkedZnoTypes",
-    ]),
   },
 };
 </script>

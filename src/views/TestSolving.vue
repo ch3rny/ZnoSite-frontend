@@ -3,7 +3,7 @@
     <v-slide-y-transition>
       <v-layout
         row
-        wrap=""
+        wrap
         justify-center
         v-touch="{ 
           left: () => nextTask(),
@@ -13,7 +13,7 @@
         <Loader :loading="loading"/>
         <!--Number block-->
         <v-flex d-flex xs12 md10 lg9 class="card__wrapper">
-          <v-layout justify-center wrap="">
+          <v-layout justify-center wrap>
             <div v-if="this.tasks.length>pageSize" @click="prevPage">
               <div
                 :class="[
@@ -76,7 +76,7 @@
               ></ZnoDescription>
             </v-subheader>
             <div>
-              <img :src="ROOT_URL+task.task_image" alt="">
+              <img :src="ROOT_URL+task.task_image" alt>
             </div>
             <answer-block
               v-if="userAnswersValue[index]===undefined"
@@ -101,7 +101,7 @@
             </div>
           </v-card>
           <div class="card__wrapper">
-            <v-layout row wrap="">
+            <v-layout row wrap>
               <v-flex xs6>
                 <v-btn
                   round
@@ -146,21 +146,15 @@ import ZnoDescription from "../components/ZnoDescription.vue";
 import AnswerBlock from "../components/AnswerBlock.vue";
 import Result from "../components/Result.vue";
 import Loader from "../components/Loader.vue";
-import { createHelpers } from "vuex-map-fields";
 import api from "@/api";
 import { ROOT_URL } from "@/constants/Const";
-
-const { mapFields } = createHelpers({
-  getterType: "znoSelection/getField",
-  mutationType: "znoSelection/updateField",
-});
 
 export default {
   components: {
     ZnoDescription,
     AnswerBlock,
     Result,
-    Loader,
+    Loader
   },
   data() {
     return {
@@ -174,23 +168,26 @@ export default {
       pageSize: 15,
       loading: true,
       mode: "sampling",
-      timer: null,
+      timer: null
     };
   },
 
   computed: {
-    ...mapFields([
-      "checkedYears",
-      "checkedThemes",
-      "checkedTypes",
-      "checkedZnoTypes",
-    ]),
     pagesTotal() {
       return Math.ceil(this.tasks.length / this.pageSize);
     },
-    qqq() {
-      return this.$route.query;
+    checkedYears() {
+      return this.$route.query.years;
     },
+    checkedThemes() {
+      return this.$route.query.themes;
+    },
+    checkedTypes() {
+      return this.$route.query.types;
+    },
+    checkedZnoTypes() {
+      return this.$route.query.znotypes;
+    }
   },
   methods: {
     checkSolving(value, index) {
@@ -223,7 +220,7 @@ export default {
     },
     prevPage() {
       if (this.currentPage > 1) this.currentPage--;
-    },
+    }
   },
   created() {
     this.mode = this.$route.params.mode;
@@ -247,8 +244,7 @@ export default {
   updated() {
     this.loading = false;
     if (this.tasks.length == 0) this.$router.push({ name: "Empty" });
-    console.log(this.qqq);
-  },
+  }
 };
 </script>
 
