@@ -47,10 +47,7 @@
 export default {
   name: "UserPanel",
   data: () => ({
-    fav: true,
-    menu: false,
-    message: false,
-    hints: true
+    menu: false
   }),
   computed: {
     user() {

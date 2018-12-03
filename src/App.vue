@@ -35,7 +35,14 @@
         </v-dialog>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" app fixed color="primary" dark>
+    <v-toolbar
+      :dense="$vuetify.breakpoint.md"
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
+      app
+      fixed
+      color="primary"
+      dark
+    >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">{{title}}</router-link>
@@ -74,14 +81,14 @@ export default {
   name: "App",
   components: {
     Feedback,
-    UserPanel,
+    UserPanel
   },
   data() {
     return {
       drawer: null,
       items: menu,
       title: "Easy__Physic",
-      dialog: false,
+      dialog: false
     };
   },
   computed: {
@@ -90,19 +97,19 @@ export default {
     },
     isLogged() {
       return this.$store.state.auth.user != null;
-    },
+    }
   },
   methods: {
     login() {
       this.$store.dispatch("auth/login");
-    },
+    }
   },
   created() {
     if (this.isLogged) {
       this.$store.dispatch("auth/inspectToken");
     }
     setInterval(() => this.$store.dispatch("auth/inspectToken"), 280000);
-  },
+  }
 };
 </script>
 <style scoped>

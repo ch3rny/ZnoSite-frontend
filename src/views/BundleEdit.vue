@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md>
-    <v-layout wrap="">
+    <v-layout wrap>
       <v-flex xs12 sm6>
         <div>
           <p class="title font-weight-medium">{{Bundle.name}}</p>
@@ -63,7 +63,7 @@
                   </v-btn>
                 </v-list-tile-action>
                 <v-dialog v-model="imageDialog" max-width="600px">
-                  <img :src="dialogImage" alt="">
+                  <img :src="dialogImage" alt>
                 </v-dialog>
               </v-list-tile>
             </transition-group>
@@ -143,7 +143,7 @@
           </v-flex>
         </v-layout>
       </v-flex>
-      <v-snackbar v-model="snackbarAdd" top color="success" :timeout="1800">
+      <v-snackbar v-model="snackbarAdd" bottom color="success" :timeout="1800">
         <v-layout align-center justify-center>
           <v-flex>
             <div>
@@ -152,11 +152,20 @@
           </v-flex>
         </v-layout>
       </v-snackbar>
-      <v-snackbar v-model="snackbarDelete" top color="error" :timeout="1800">
+      <v-snackbar v-model="snackbarDelete" bottom color="error" :timeout="1800">
         <v-layout align-center justify-center>
           <v-flex>
             <div>
               <p class="text-xs-center noPadding">Завдання видалено</p>
+            </div>
+          </v-flex>
+        </v-layout>
+      </v-snackbar>
+      <v-snackbar v-model="snackbarSave" bottom color="success" :timeout="1800">
+        <v-layout align-center justify-center>
+          <v-flex>
+            <div>
+              <p class="text-xs-center noPadding">Добірку збережено</p>
             </div>
           </v-flex>
         </v-layout>
@@ -169,7 +178,7 @@
           :rows-per-page-items="rowsPerPageItems"
           :pagination.sync="pagination"
           row
-          wrap=""
+          wrap
           no-data-text="Немає завдань за вашими критеріями"
         >
           <v-flex slot="item" slot-scope="props" xs12>
@@ -192,10 +201,26 @@
             </v-card>
           </v-flex>
         </v-data-iterator>
+        <v-flex v-show="$vuetify.breakpoint.mdAndDown">
+          <div class="kostyl"/>
+        </v-flex>
       </v-flex>
     </v-layout>
+    <v-dialog v-model="saveDialog" max-width="300px">
+      <v-card>
+        <v-card-title
+          class="headline text-xs-center"
+        >Вашу добірку не збережено! Ви дійсно бажаєти вийти?</v-card-title>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn color="primary" flat="flat" @click="saveDialog = false">Повернутися</v-btn>
+          <v-btn color="red darken-1" flat="flat" @click="confirmExit()">Вийти</v-btn>
+          <v-spacer/>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-fab-transition>
-      <v-btn color="primary" dark fixed bottom fab @click="saveBundle()">
+      <v-btn class="z" color="primary" dark fixed right bottom fab @click="saveBundle()">
         <v-icon>save</v-icon>
       </v-btn>
     </v-fab-transition>
@@ -220,12 +245,16 @@ export default {
       index: null,
       rowsPerPageItems: [10],
       pagination: {
-        rowsPerPage: 10,
+        rowsPerPage: 10
       },
       snackbarAdd: false,
       snackbarDelete: false,
+      snackbarSave: false,
       imageDialog: false,
+      saveDialog: false,
       dialogImage: "",
+      confirmButton: false,
+      confirmButtonUrl: "",
       bundleCover: BUNDLE_DEFAULT_COVER,
       ROOT_URL,
       Bundle: {},
@@ -240,13 +269,13 @@ export default {
       THEMES,
       TYPES,
       ZNO_TYPES,
-      YEARS,
+      YEARS
     };
   },
   computed: {
     bundleID() {
       return this.$route.params.id;
-    },
+    }
   },
   watch: {
     Bundle: {
@@ -256,10 +285,9 @@ export default {
           this.bundleCover = ROOT_URL + this.Bundle.cover;
         }
         this.isSaved = false;
-        console.log(this.isSaved);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
     loadTasks() {
@@ -319,6 +347,7 @@ export default {
         .updateBundle(payload, this.Bundle.id)
         .then(response => {
           this.isSaved = true;
+          this.snackbarSave = true;
           // eslint-disable-next-line
           console.log(this.isSaved);
           console.log(response);
@@ -328,6 +357,12 @@ export default {
           console.log(error.response);
         });
     },
+    confirmExit() {
+      this.confirmButton = true;
+      this.$router.push({
+        path: this.confirmButtonUrl
+      });
+    }
   },
   mounted() {
     api.bundles.getBundle(this.bundleID).then(res => (this.Bundle = res.data));
@@ -335,18 +370,15 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     if (!this.isSaved) {
-      const answer = window.confirm(
-        "Вашу добірку не збережено! Ви дійсно бажаєти вийти?"
-      );
-      if (answer) {
+      this.saveDialog = true;
+      this.confirmButtonUrl = to.path;
+      if (this.confirmButton) {
         next();
-      } else {
-        next(false);
       }
     } else {
       next();
     }
-  },
+  }
 };
 </script>
 <style>
@@ -377,5 +409,11 @@ img {
 }
 .pointer {
   cursor: pointer;
+}
+.kostyl {
+  height: 56px;
+}
+.z {
+  z-index: 1000;
 }
 </style>

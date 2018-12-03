@@ -3,13 +3,13 @@
     <div>
       <p class="title font-weight-medium">Мої добірки</p>
     </div>
-    <v-layout wrap="">
+    <v-layout wrap>
       <v-flex xs12 sm6>
         <v-text-field v-model="searchBundle" label="Пошук" prepend-icon="search" clearable/>
       </v-flex>
       <v-flex xs12>
         <v-subheader>Мої</v-subheader>
-        <v-layout row>
+        <v-layout row wrap>
           <v-flex
             xs6
             sm4
