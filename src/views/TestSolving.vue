@@ -226,10 +226,14 @@ export default {
     this.mode = this.$route.params.mode;
   },
   mounted() {
-    if (this.mode == "bundle") {
-      api.tasks
-        .getBundleTasks(this.$route.params.tasks)
-        .then(res => (this.tasks = res.data));
+    if (this.$route.name == "BundleSolving") {
+      api.bundles
+        .getBundle(this.$route.params.id)
+        .then(res =>
+          api.tasks
+            .getBundleTasks(res.data.tasks)
+            .then(res => (this.tasks = res.data))
+        );
     } else {
       api.tasks
         .getTasks(

@@ -19,9 +19,7 @@
             v-show="bundle.name.indexOf(searchBundle)>=0"
           >
             <v-card v-show="index<=max">
-              <router-link
-                :to="{ name: 'TestSolving', params: { mode: 'bundle', tasks: bundle.tasks}}"
-              >
+              <router-link :to="{ name: 'BundleSolving', params: { id: bundle.id}}">
                 <v-img
                   class="white--text"
                   height="150px"

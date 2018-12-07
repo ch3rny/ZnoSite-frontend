@@ -46,6 +46,18 @@ const ZNO_LIST = [{
     year: 2015,
     znoType: 3,
   },
+  {
+    year: 2014,
+    znoType: 1,
+  },
+  {
+    year: 2014,
+    znoType: 2,
+  },
+  {
+    year: 2013,
+    znoType: 1,
+  },
 ]
 
 export default ZNO_LIST;

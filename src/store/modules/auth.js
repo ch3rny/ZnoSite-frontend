@@ -1,15 +1,13 @@
 import jwt_decode from "jwt-decode";
-import {
-  GOOGLE_AUTH_CLIENT_ID
-} from '@/constants/Const';
-import api from '@/api'
+import { GOOGLE_AUTH_CLIENT_ID } from "@/constants/Const";
+import api from "@/api";
 
 export default {
   namespaced: true,
   state: {
     jwt: null,
     user: null,
-    avatar: null
+    avatar: null,
   },
   mutations: {
     loginUser(state, profile) {
@@ -26,16 +24,13 @@ export default {
     updateJWT(state, newToken) {
       state.jwt = newToken;
     },
-
   },
   actions: {
-    login({
-      commit
-    }) {
+    login({ commit }) {
       return new Promise((resolve, reject) => {
         window.gapi.load("auth2", () => {
           const auth2 = window.gapi.auth2.init({
-            client_id: GOOGLE_AUTH_CLIENT_ID
+            client_id: GOOGLE_AUTH_CLIENT_ID,
           });
           auth2
             .signIn()
@@ -43,16 +38,18 @@ export default {
               const token = resp.Zi.access_token;
               const avatar = resp.w3.Paa;
               commit("setAvatar", avatar);
-              api.auth.getToken(token)
+              api.auth
+                .getToken(token)
                 .then(resp => {
                   const user = resp.data.user;
                   const jwt_token = resp.data.token;
-                  commit("loginUser", user, avatar);
+                  commit("loginUser", user);
                   commit("updateJWT", jwt_token);
                 })
                 .catch(err => {
                   console.log(err.response);
                 });
+              resolve();
             })
             .catch(err => {
               console.log("OH NOES", err);
@@ -61,28 +58,38 @@ export default {
         });
       });
     },
-    logout({
-      commit
-    }) {
-      window.gapi.load("auth2", () => {
-        const auth2 = window.gapi.auth2.init({
-          client_id: GOOGLE_AUTH_CLIENT_ID
-        });
-        auth2
-          .signOut()
-          .then(
-            commit("logoutUser"))
-          .catch(err => {
-            console.log("OH NOES", err);
-            reject(err);
-          });
+    logout({ commit }) {
+      return new Promise((resolve, reject) => {
+        if (
+          window.gapi &&
+          window.gapi.auth2 &&
+          window.gapi.auth2.getAuthInstance()
+        ) {
+          gapi.auth2
+            .getAuthInstance()
+            .signOut()
+            .then(
+              () => {
+                commit("logoutUser");
+                resolve();
+              },
+              () => {
+                commit("logoutUser");
+                resolve();
+              }
+            );
+        } else {
+          commit("logoutUser");
+          resolve();
+        }
       });
     },
     refreshToken() {
       const payload = {
-        token: this.state.auth.jwt
+        token: this.state.auth.jwt,
       };
-      api.auth.refreshToken(payload)
+      api.auth
+        .refreshToken(payload)
         .then(response => {
           this.commit("auth/updateJWT", response.data.token);
         })
@@ -90,9 +97,7 @@ export default {
           console.log(error);
         });
     },
-    inspectToken({
-      commit
-    }) {
+    inspectToken({ commit }) {
       const token = this.state.auth.jwt;
       const decoded = jwt_decode(token);
       if (token != null) {
@@ -112,6 +117,6 @@ export default {
         // NO TOKEN THEN SEND TO LOGIN PAGE
         this.dispatch("auth/login");
       }
-    }
-  }
+    },
+  },
 };

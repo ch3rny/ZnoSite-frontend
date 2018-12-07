@@ -64,7 +64,11 @@ export default new Router({
       path: "/bundle/:id/edit",
       name: "BundleEdit",
       component: BundleEdit,
-
-    }
+    },
+    {
+      path: "/bundle/:id/",
+      name: "BundleSolving",
+      component: TestSolving,
+    },
   ]
 });
