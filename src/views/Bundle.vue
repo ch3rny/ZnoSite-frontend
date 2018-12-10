@@ -1,14 +1,28 @@
 <template>
   <v-container grid-list-md>
-    <div>
-      <p class="title font-weight-medium">Мої добірки</p>
-    </div>
     <v-layout wrap>
       <v-flex xs12 sm6>
         <v-text-field v-model="searchBundle" label="Пошук" prepend-icon="search" clearable/>
       </v-flex>
       <v-flex xs12>
-        <v-subheader>Мої</v-subheader>
+        <div class="d-inline-flex">
+          <p class="title font-weight-medium">Мої добірки</p>
+          <v-spacer></v-spacer>
+          <v-menu bottom left icon>
+            <v-btn slot="activator" flat icon>
+              <v-icon>sort</v-icon>
+            </v-btn>
+            <v-list>
+              <v-list-tile v-for="(item, i) in sortList" :key="i" @click="sortArray(item.prop)">
+                <v-list-tile-title>{{ item.title}}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
+          <v-btn flat icon @click="reverseArray()">
+            <v-icon>sort_by_alpha</v-icon>
+          </v-btn>
+        </div>
+
         <v-layout row wrap>
           <v-flex
             xs6
@@ -141,7 +155,13 @@ export default {
       shareDialog: false,
       index: "",
       searchBundle: "",
-      newBundleName: "Нова добірка"
+      newBundleName: "Нова добірка",
+      sortList: [
+        { title: "за назвою", prop: "name" },
+        { title: "за датою створення", prop: "created_date" },
+        { title: "за останніми змінами", prop: "edited_date" },
+        { title: "за кількістю завдань", prop: "tasks" }
+      ]
     };
   },
   computed: {
@@ -179,6 +199,15 @@ export default {
           console.log(error.response);
         });
       this.createDialog = false;
+    },
+    reverseArray() {
+      this.myBundles = this.myBundles.reverse();
+    },
+    sortArray(prop) {
+      console.log(prop);
+      this.myBundles = this.myBundles.sort((a, b) =>
+        a[prop] > b[prop] ? 1 : b[prop] > a[prop] ? -1 : 0
+      );
     }
   },
   mounted() {
@@ -190,3 +219,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.title {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+</style>

@@ -8,7 +8,7 @@
       :stateless="dialog"
     >
       <v-list>
-        <v-list-tile class="hidden-lg-and-up">
+        <v-list-tile class="hidden-lg-and-up menu" color="red">
           <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
           <v-toolbar-title v-text="title"></v-toolbar-title>
         </v-list-tile>
@@ -36,7 +36,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
-      :dense="$vuetify.breakpoint.md"
+      height="56px"
       :clipped-left="$vuetify.breakpoint.lgAndUp"
       app
       fixed
@@ -56,9 +56,15 @@
       </v-toolbar-title>
       <v-toolbar-items>
         <v-btn v-if="!isLogged" flat large color="white" @click="login()">УВІЙТИ</v-btn>
-        <v-btn flat v-else :ripple="false">
+        <!-- <v-btn flat v-else :ripple="false">
           <user-panel/>
-        </v-btn>
+        </v-btn>-->
+        <v-menu v-else bottom left attach nudge-bottom="4">
+          <v-avatar slot="activator">
+            <img :src="avatar" alt="avatar">
+          </v-avatar>
+          <user-panel/>
+        </v-menu>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
@@ -97,6 +103,9 @@ export default {
     },
     isLogged() {
       return this.$store.state.auth.user != null;
+    },
+    avatar() {
+      return this.$store.state.auth.avatar;
     }
   },
   methods: {
@@ -109,6 +118,7 @@ export default {
       this.$store.dispatch("auth/inspectToken");
     }
     setInterval(() => this.$store.dispatch("auth/inspectToken"), 280000);
+    console.log("fdfdfdf", this.avatar);
   }
 };
 </script>
@@ -119,5 +129,8 @@ export default {
 }
 .v-btn {
   text-transform: none;
+}
+.menu {
+  margin-left: -16px;
 }
 </style>
