@@ -6,8 +6,8 @@
         wrap
         justify-center
         v-touch="{ 
-          left: () => nextTask(),
-          right: () => prevTask()
+          left: nextTask,
+          right: prevTask
           }"
       >
         <Loader :loading="loading"/>
@@ -67,13 +67,7 @@
         >
           <v-card class="card__wrapper">
             <v-subheader>
-              <ZnoDescription
-                :index="index+1"
-                :znoType="task.zno_type"
-                :number="task.number"
-                :year="task.year"
-                :theme="task.theme.name"
-              ></ZnoDescription>
+              <ZnoDescription :index="index+1" :task="task"></ZnoDescription>
             </v-subheader>
             <div>
               <img :src="ROOT_URL+task.task_image" alt>
@@ -84,21 +78,11 @@
               :answer="task.correct_answer"
               :type="task.type"
             ></answer-block>
-            <div
-              v-if="userAnswersValue[index]==task.correct_answer"
-              class="answer font-weight-medium"
-            >
-              <span>Ви дали правильну відповідь</span>
-              <br>
-              <span>Ваша відповідь: {{userAnswersValue[index]}}</span>
-            </div>
-            <div v-if="userAnswersRight[index]==0" class="answer font-weight-medium">
-              <span class="wrong">Ви дали неправильну відповідь</span>
-              <br>
-              <span class="wrong">Ваша відповідь: {{userAnswersValue[index]}}</span>
-              <br>
-              <span>Правильна відповідь: {{task.correct_answer}}</span>
-            </div>
+            <solution-block
+              :user-answer="userAnswersValue[index]"
+              :user-answer-right="userAnswersRight[index]"
+              :correct-answer="task.correct_answer"
+            />
           </v-card>
           <div class="card__wrapper">
             <v-layout row wrap>
@@ -146,6 +130,8 @@ import ZnoDescription from "../components/ZnoDescription.vue";
 import AnswerBlock from "../components/AnswerBlock.vue";
 import Result from "../components/Result.vue";
 import Loader from "../components/Loader.vue";
+import SolutionBlock from "../components/SolutionBlock.vue";
+
 import api from "@/api";
 import { ROOT_URL } from "@/constants/Const";
 
@@ -154,7 +140,8 @@ export default {
     ZnoDescription,
     AnswerBlock,
     Result,
-    Loader
+    Loader,
+    SolutionBlock
   },
   data() {
     return {
@@ -167,7 +154,6 @@ export default {
       currentPage: 1,
       pageSize: 15,
       loading: true,
-      mode: "sampling",
       timer: null
     };
   },
@@ -222,9 +208,7 @@ export default {
       if (this.currentPage > 1) this.currentPage--;
     }
   },
-  created() {
-    this.mode = this.$route.params.mode;
-  },
+  created() {},
   mounted() {
     if (this.$route.name == "BundleSolving") {
       api.bundles

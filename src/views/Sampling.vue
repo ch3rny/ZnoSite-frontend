@@ -3,61 +3,33 @@
     <div>
       <p class="title font-weight-medium">Створіть власний тест за наступними параметрами:</p>
     </div>
-    <v-layout row wrap="">
+    <v-layout wrap>
       <v-flex xs12 sm6 md4 lg4>
-        <div>
-          <v-subheader>Оберіть роки</v-subheader>
-          <v-checkbox
-            hide-details
-            v-for="k in YEARS"
-            v-model="checkedYears"
-            :value="k"
-            :key="k"
-            :label="k.toString()"
-            color="primary"
-          ></v-checkbox>
-        </div>
+        <check-box-group label="Оберіть роки" @update="checkedYears=$event" :items="YEARS"/>
       </v-flex>
       <v-flex xs12 sm6 md4 lg4>
-        <div>
-          <v-subheader>Оберіть теми</v-subheader>
-          <v-checkbox
-            hide-details
-            v-for="theme in THEMES"
-            v-model="checkedThemes"
-            :value="theme"
-            :key="theme"
-            :label="theme"
-            color="primary"
-          ></v-checkbox>
-        </div>
+        <check-box-group label="Оберіть теми" @update="checkedThemes=$event" :items="THEMES"/>
       </v-flex>
       <v-flex xs12 sm6 md4 lg4>
-        <div>
-          <v-subheader>Оберіть типи завдань</v-subheader>
-          <v-checkbox
-            hide-details
-            v-for="type in TYPES"
-            v-model="checkedTypes"
-            :value="type.value"
-            :key="type.value"
-            :label="type.name"
-            color="primary"
-          ></v-checkbox>
-          <br>
-          <br>
-          <br>
-          <v-subheader>Оберіть типи ЗНО</v-subheader>
-          <v-checkbox
-            hide-details
-            v-for="type in ZNO_TYPES"
-            v-model="checkedZnoTypes"
-            :value="type.value"
-            :key="type.name"
-            :label="type.name"
-            color="primary"
-          ></v-checkbox>
-        </div>
+        <v-layout column>
+          <v-flex xs12>
+            <check-box-group
+              label="Оберіть типи завдань"
+              @update="checkedTypes=$event"
+              :items="TYPES"
+            />
+          </v-flex>
+          <v-flex>
+            <div class="placeholder"></div>
+          </v-flex>
+          <v-flex xs12>
+            <check-box-group
+              label="Оберіть типи ЗНО"
+              @update="checkedZnoTypes=$event"
+              :items="ZNO_TYPES"
+            />
+          </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
     <v-fab-transition>
@@ -85,8 +57,12 @@ import THEMES from "@/constants/Themes";
 import YEARS from "@/constants/Years";
 import TYPES from "@/constants/Types";
 import ZNO_TYPES from "@/constants/ZnoTypes";
+import CheckBoxGroup from "../components/CheckBoxGroup.vue";
 
 export default {
+  components: {
+    CheckBoxGroup
+  },
   data() {
     return {
       THEMES,
@@ -96,16 +72,14 @@ export default {
       checkedYears: [],
       checkedThemes: [],
       checkedTypes: [],
-      checkedZnoTypes: [],
+      checkedZnoTypes: []
     };
-  },
+  }
 };
 </script>
-
 <style scoped>
-.v-input {
-  padding-left: 8px;
-  margin-top: 4px;
+.placeholder {
+  height: 3em;
 }
 </style>
 

@@ -5,8 +5,8 @@
       wrap
       justify-center
       v-touch="{
-        left: () => nextTask(),
-        right: () => prevTask()
+        left: nextTask,
+        right: prevTask
         }"
     >
       <Loader :loading="loading"/>
@@ -16,7 +16,7 @@
             <div
               v-ripple
               :class="[
-                { isActive: activeTask==n },
+                {isActive: activeTask==n },
                 {number: true},
                 {isTrue: (userAnswersRight[n-1]==1 && showResult)},
                 {isHalfTrue: (userAnswersRight[n-1]==0.5 && showResult)},
@@ -55,7 +55,7 @@
           <div>
             <img :src="ROOT_URL+task.task_image " alt=" ">
           </div>
-          <div v-if="!showResult ">
+          <div v-if="!showResult">
             <answer-block
               v-if="userAnswersValue[index]===undefined "
               @checkAnswer="checkSolving($event, index, task.type) "
@@ -63,44 +63,13 @@
               :type="task.type "
             />
           </div>
-          <div
-            v-if="(userAnswersValue[index]==task.correct_answer) && showResult "
-            class="answer font-weight-medium"
-          >
-            <span>Ви дали правильну відповідь</span>
-            <br>
-            <span>Ваша відповідь: {{userAnswersValue[index]}}</span>
-            <br>
-            <span>Отримано балів: {{userAnswersScore[index]}}</span>
-          </div>
-          <div
-            v-if="(userAnswersRight[index]==0.5) && showResult "
-            class="answer font-weight-medium"
-          >
-            <span class="wrong">Ви частково виконали завдання</span>
-            <br>
-            <span class="wrong">Ваша відповідь: {{userAnswersValue[index]}}</span>
-            <br>
-            <span>Правильна відповідь: {{task.correct_answer}}</span>
-            <br>
-            <span>Отримано балів: {{userAnswersScore[index]}}</span>
-          </div>
-          <div v-if="(userAnswersRight[index]==0) && showResult " class="answer font-weight-medium">
-            <span class="wrong">Ви дали неправильну відповідь</span>
-            <br>
-            <span class="wrong">Ваша відповідь: {{userAnswersValue[index]}}</span>
-            <br>
-            <span>Правильна відповідь: {{task.correct_answer}}</span>
-            <br>
-            <span>Отримано балів: {{userAnswersScore[index]}}</span>
-          </div>
-          <div
-            v-if="(userAnswersValue[index]===undefined) && showResult "
-            class="answer font-weight-medium"
-          >
-            <span>Ви не виконували це завдання</span>
-            <br>
-            <span>Отримано балів: 0</span>
+          <div v-if="showResult">
+            <solution-block
+              :user-answer="userAnswersValue[index]"
+              :user-answer-right="userAnswersRight[index]"
+              :correct-answer="task.correct_answer"
+              :user-score="userAnswersScore[index]"
+            />
           </div>
         </v-card>
         <div class="card__wrapper">
@@ -124,20 +93,13 @@
                 v-if="activeTask<tasks.length "
                 @click="nextTask "
               >Наступне</v-btn>
-              <v-btn
-                round
-                block
-                outline
-                color="primary"
-                v-if="activeTask==tasks.length "
-                @click="endTest "
-              >Завершити</v-btn>
+              <v-btn round block outline color="primary" v-else @click="endTest ">Завершити</v-btn>
             </v-flex>
           </v-layout>
         </div>
       </v-flex>
       <v-flex xs12 sm12 md10 lg9 v-if="showResult && (activeTask> tasks.length)">
-        <ZnoResult :total="totalScore"/>
+        <zno-result :total="totalScore"/>
       </v-flex>
     </v-layout>
   </v-container>
@@ -148,6 +110,7 @@ import ZnoDescription from "../components/ZnoDescription.vue";
 import AnswerBlock from "../components/AnswerBlock.vue";
 import ZnoResult from "../components/ZnoResult.vue";
 import Loader from "../components/Loader.vue";
+import SolutionBlock from "../components/SolutionBlock.vue";
 import { ROOT_URL } from "@/constants/Const";
 import api from "@/api";
 
@@ -156,7 +119,8 @@ export default {
     ZnoDescription,
     AnswerBlock,
     ZnoResult,
-    Loader
+    Loader,
+    SolutionBlock
   },
   data() {
     return {
@@ -205,6 +169,7 @@ export default {
           if (this.tasks[index].correct_answer.indexOf(" ") > 0) {
             let ans1 = value.split(" ");
             let ans2 = this.tasks[index].correct_answer.split(" ");
+            //use forEach
             for (var j = 0; j < ans2.length; j++) {
               if (ans1[j] == ans2[j]) {
                 score += 1;
@@ -286,7 +251,6 @@ img {
   margin-right: auto;
   border-radius: 12px;
 }
-
 .number {
   width: 24px;
   height: 24px;
@@ -323,13 +287,7 @@ img {
 .isAnswered {
   background-color: lightblue;
 }
-.answer {
-  padding: 16px;
-  color: #1b5e20;
-}
-.wrong {
-  color: red;
-}
+
 .loader {
   width: 100%;
   height: 60vh;

@@ -56,9 +56,6 @@
       </v-toolbar-title>
       <v-toolbar-items>
         <v-btn v-if="!isLogged" flat large color="white" @click="login()">УВІЙТИ</v-btn>
-        <!-- <v-btn flat v-else :ripple="false">
-          <user-panel/>
-        </v-btn>-->
         <v-menu v-else bottom left attach nudge-bottom="4">
           <v-avatar slot="activator">
             <img :src="avatar" alt="avatar">

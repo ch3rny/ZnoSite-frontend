@@ -1,7 +1,7 @@
 <template>
-  <v-layout justify-center wrap="" align-center column>
+  <v-layout justify-center wrap align-center column>
     <v-flex xs12 md10 lg9>
-      <img src="@/assets/dev.png" alt="">
+      <img src="@/assets/dev.png" alt>
     </v-flex>
     <v-flex text-xs-center>
       <v-btn round depressed color="primary" v-on:click="goBack()">Назад</v-btn>
