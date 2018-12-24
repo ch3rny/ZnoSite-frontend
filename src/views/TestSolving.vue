@@ -180,7 +180,7 @@ export default {
     },
     sendStat(value, index) {
       let payload = {
-        user: userId,
+        user: this.userId,
         task: this.tasks[index].id,
         theme: this.tasks[index].theme.name,
         user_answer: value,

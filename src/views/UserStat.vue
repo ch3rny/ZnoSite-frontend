@@ -112,7 +112,6 @@ export default {
           ]
         });
       });
-      console.table(ratata);
       this.answerThemesChart = {
         labels: ["Правильних", "Неправильних"],
         datasets: answerThemesChartData
