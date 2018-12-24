@@ -122,20 +122,20 @@
       <br>
       <v-subheader>Впишіть правильну відповідь:</v-subheader>
       <v-flex xs9 sm6>
-        <v-text-field class="half-padding" v-model="answer5" solo></v-text-field>
+        <v-text-field class="half-padding" v-model.trim="answer5" solo></v-text-field>
         <v-btn round color="primary" class="padding" v-on:click="checkAnswerType4">Відповісти</v-btn>
       </v-flex>
     </div>
     <div v-if="(type==3) && (answer.indexOf(' ')>0)">
       <br>
       <v-subheader>Впишіть правильні відповіді:</v-subheader>
-      <v-layout wrap="" row>
+      <v-layout wrap row>
         <v-flex xs6>
-          <v-text-field class="half-padding" v-model="answer5" solo label="1. "></v-text-field>
+          <v-text-field class="half-padding" v-model.trim="answer5" solo label="1. "></v-text-field>
           <v-btn round color="primary" class="padding" v-on:click="checkAnswerType3">Відповісти</v-btn>
         </v-flex>
         <v-flex xs6>
-          <v-text-field class="half-padding-right" v-model="answer6" solo label="2. "></v-text-field>
+          <v-text-field class="half-padding-right" v-model.trim="answer6" solo label="2. "></v-text-field>
         </v-flex>
       </v-layout>
     </div>
@@ -147,7 +147,7 @@ export default {
   name: "AnswerBlock",
   props: {
     type: Number,
-    answer: String,
+    answer: String
   },
   data() {
     return {
@@ -156,7 +156,7 @@ export default {
       answer3: " ",
       answer4: " ",
       answer5: "",
-      answer6: "",
+      answer6: ""
     };
   },
   methods: {
@@ -171,12 +171,14 @@ export default {
     },
     checkAnswerType3() {
       let answer = `${this.answer5} ${this.answer6}`;
+      answer = answer.replace(/\./g, ",");
       this.$emit("checkAnswer", answer);
     },
     checkAnswerType4() {
+      this.answer5 = this.answer5.replace(/\./g, ",");
       this.$emit("checkAnswer", this.answer5);
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
