@@ -67,7 +67,7 @@
         >
           <v-card class="card__wrapper">
             <v-subheader>
-              <ZnoDescription :index="index+1" :task="task"></ZnoDescription>
+              <task-description :index="index+1" :task="task"/>
             </v-subheader>
             <div>
               <img :src="ROOT_URL+task.task_image" alt>
@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import ZnoDescription from "../components/ZnoDescription.vue";
+import TaskDescription from "../components/TaskDescription.vue";
 import AnswerBlock from "../components/AnswerBlock.vue";
 import Result from "../components/Result.vue";
 import Loader from "../components/Loader.vue";
@@ -137,7 +137,7 @@ import { ROOT_URL } from "@/constants/Const";
 
 export default {
   components: {
-    ZnoDescription,
+    TaskDescription,
     AnswerBlock,
     Result,
     Loader,
@@ -162,17 +162,11 @@ export default {
     pagesTotal() {
       return Math.ceil(this.tasks.length / this.pageSize);
     },
-    checkedYears() {
-      return this.$route.query.years;
+    isLogged() {
+      return this.$store.state.auth.user != null;
     },
-    checkedThemes() {
-      return this.$route.query.themes;
-    },
-    checkedTypes() {
-      return this.$route.query.types;
-    },
-    checkedZnoTypes() {
-      return this.$route.query.znotypes;
+    userId() {
+      return this.$store.state.auth.user.pk;
     }
   },
   methods: {
@@ -180,8 +174,19 @@ export default {
       this.userAnswersValue[index] = value;
       this.userAnswersRight[index] =
         value == this.tasks[index].correct_answer ? 1 : 0;
+      this.sendStat(value, index);
       this.$forceUpdate();
       this.timer = setTimeout(this.nextTask, 3000);
+    },
+    sendStat(value, index) {
+      let payload = {
+        user: userId,
+        task: this.tasks[index].id,
+        theme: this.tasks[index].theme.name,
+        user_answer: value,
+        is_true: value == this.tasks[index].correct_answer ? true : false
+      };
+      api.stats.postTestAnswer(payload).then(res => console.log(res));
     },
     changeTask(n) {
       clearTimeout(this.timer);
@@ -206,9 +211,12 @@ export default {
     },
     prevPage() {
       if (this.currentPage > 1) this.currentPage--;
-    }
+    },
+    checkQuery: value => (value != undefined ? value : "")
   },
-  created() {},
+  created() {
+    console.log(this.$route.query);
+  },
   mounted() {
     if (this.$route.name == "BundleSolving") {
       api.bundles
@@ -221,10 +229,11 @@ export default {
     } else {
       api.tasks
         .getTasks(
-          this.checkedYears,
-          this.checkedThemes,
-          this.checkedTypes,
-          this.checkedZnoTypes
+          //переписать на хук креатед
+          this.checkQuery(this.$route.query.years),
+          this.checkQuery(this.$route.query.themes),
+          this.checkQuery(this.$route.query.types),
+          this.checkQuery(this.$route.query.znotypes)
         )
         .then(res => (this.tasks = res.data));
     }
@@ -306,4 +315,3 @@ img {
   cursor: default;
 }
 </style>
-g

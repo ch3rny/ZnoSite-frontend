@@ -5,10 +5,12 @@ import auth from './auth'
 import bundles from './bundles';
 import reviews from './reviews'
 import tasks from './tasks';
+import stats from './stats';
 
 export default {
 	auth,
 	bundles,
 	reviews,
-	tasks
+	tasks,
+	stats
 };

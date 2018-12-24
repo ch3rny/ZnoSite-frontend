@@ -9,7 +9,8 @@ import Home from "../views/Home.vue";
 import InDev from "../views/InDev.vue";
 import Bundle from "../views/Bundle.vue";
 import BundleEdit from "../views/BundleEdit.vue";
-import Handbook from "../views/Handbook.vue"
+import Handbook from "../views/Handbook.vue";
+import UserStat from "../views/UserStat.vue"
 
 Vue.use(Router);
 
@@ -70,5 +71,10 @@ export default new Router({
       name: "BundleSolving",
       component: TestSolving,
     },
+    {
+      path: "/stat/",
+      name: "Stat",
+      component: UserStat
+    }
   ]
 });
