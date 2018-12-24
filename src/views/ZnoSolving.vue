@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import ZnoDescription from "../components/ZnoDescription.vue";
+//import ZnoDescription from "../components/ZnoDescription.vue";
 import AnswerBlock from "../components/AnswerBlock.vue";
 import ZnoResult from "../components/ZnoResult.vue";
 import Loader from "../components/Loader.vue";
@@ -116,7 +116,7 @@ import api from "@/api";
 
 export default {
   components: {
-    ZnoDescription,
+    //ZnoDescription,
     AnswerBlock,
     ZnoResult,
     Loader,
@@ -133,7 +133,7 @@ export default {
       showResult: false,
       totalScore: 0,
       loading: true,
-      now: 0,
+      //now: 0,
       timer: null
     };
   },
@@ -144,8 +144,8 @@ export default {
   },
   methods: {
     timer_loop() {
-      this.now = new Date().getTime();
-      let timeLeft = Math.round((this.endTime - this.now) / (60 * 1000));
+      let now = new Date().getTime();
+      let timeLeft = Math.round((this.endTime - now) / (60 * 1000));
       this.$store.commit("znoTimer/changeTimeLeft", timeLeft);
       this.timer = setTimeout(this.timer_loop, 60 * 1000);
     },
@@ -170,11 +170,11 @@ export default {
             let ans1 = value.split(" ");
             let ans2 = this.tasks[index].correct_answer.split(" ");
             //use forEach
-            for (var j = 0; j < ans2.length; j++) {
-              if (ans1[j] == ans2[j]) {
+            ans1.forEach((item, i) => {
+              if (item == ans2[i]) {
                 score += 1;
               }
-            }
+            });
           } else {
             if (value == this.tasks[index].correct_answer) {
               score += 2;
@@ -210,15 +210,14 @@ export default {
       this.showResult = true;
       this.activeTask = this.tasks.length + 1;
       this.totalScore = this.userAnswersScore.reduce((a, b) => a + b, 0);
-      // for (var i = 0; i < this.userAnswersScore.length; i++) {
-      //   if (this.userAnswersValue[i] != undefined) {
-      //     this.totalScore += this.userAnswersScore[i];
-      //   }
-      // }
     }
   },
   created() {
+    if (this.endTime == null) {
+      this.$store.commit("znoTimer/setEndTime");
+    }
     this.timer_loop();
+    api.stats.getGovno().then(res => console.log(res.data[0].task.theme.name));
   },
   mounted() {
     api.tasks
