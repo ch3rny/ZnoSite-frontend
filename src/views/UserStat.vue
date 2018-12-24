@@ -84,9 +84,7 @@ export default {
       ];
       let sortedAnswers = [];
       THEMES.forEach((element, i) => {
-        sortedAnswers.push(
-          this.allStat.filter(element => item.theme == element)
-        );
+        sortedAnswers.push(this.allStat.filter(item => item.theme == element));
       });
       let arr = [];
       sortedAnswers.forEach(element => arr.push(element.length));
@@ -112,7 +110,6 @@ export default {
           ]
         });
       });
-      console.table(ratata);
       this.answerThemesChart = {
         labels: ["Правильних", "Неправильних"],
         datasets: answerThemesChartData
