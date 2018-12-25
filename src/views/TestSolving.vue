@@ -174,7 +174,7 @@ export default {
       this.userAnswersValue[index] = value;
       this.userAnswersRight[index] =
         value == this.tasks[index].correct_answer ? 1 : 0;
-      this.sendStat(value, index);
+      if (this.isLogged) this.sendStat(value, index);
       this.$forceUpdate();
       this.timer = setTimeout(this.nextTask, 3000);
     },
