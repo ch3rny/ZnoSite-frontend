@@ -1,5 +1,5 @@
 <template>
-  <v-layout justify-center wrap="" align-center>
+  <v-layout justify-center wrap align-center>
     <v-flex xs12 md10 lg9>
       <v-card class="card__wrapper">
         <br>
@@ -19,7 +19,7 @@
         </div>
         <br>
         <v-divider></v-divider>
-        <v-layout justify-center wrap="" align-center>
+        <v-layout justify-center wrap align-center>
           <v-flex text-xs-center>
             <v-btn round depressed color="primary" class="resultButton" outline to="/">На головну</v-btn>
           </v-flex>
@@ -40,11 +40,13 @@
 </template>
 
 <script>
+//import Chart from "../components/Chart.vue";
+
 export default {
   name: "Result",
   props: {
     all: Number,
-    answers: Array,
+    answers: Array
   },
   methods: {
     correct() {
@@ -52,8 +54,8 @@ export default {
     },
     rate() {
       return ((this.correct() / this.all) * 100).toFixed(2);
-    },
-  },
+    }
+  }
 };
 </script>
 

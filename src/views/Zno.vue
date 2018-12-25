@@ -34,27 +34,13 @@ export default {
   },
   methods: {
     goToZnoSolving(year, type) {
-      this.$store.commit("znoTimer/setEndTime");
       this.$router.push({
         name: "ZnoSolving",
         params: { year: year, znotype: type }
       });
     },
-    getTitle(type) {
-      let desc;
-      switch (type) {
-        case 1:
-          desc = "Основна сесія";
-          break;
-        case 2:
-          desc = "Пробне ЗНО";
-          break;
-        case 3:
-          desc = "Додаткова сесія";
-          break;
-      }
-      return desc;
-    }
+    getTitle: type =>
+      type == 1 ? "Основна сесія" : type == 2 ? "Пробне ЗНО" : "Додаткова сесія"
   }
 };
 </script>

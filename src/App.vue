@@ -9,19 +9,19 @@
     >
       <v-list>
         <v-list-tile class="hidden-lg-and-up menu" color="red">
-          <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-          <v-toolbar-title v-text="title"></v-toolbar-title>
+          <v-toolbar-side-icon @click.stop="drawer = !drawer"/>
+          <v-toolbar-title v-text="title"/>
         </v-list-tile>
-        <v-divider class="hidden-lg-and-up"></v-divider>
+        <v-divider class="hidden-lg-and-up"/>
         <v-list-tile value="true" v-for="(item, i) in items" :key="i" :to="{name: item.route }">
           <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
+            <v-icon v-html="item.icon"/>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+            <v-list-tile-title v-text="item.title"/>
           </v-list-tile-content>
         </v-list-tile>
-        <v-divider inset></v-divider>
+        <v-divider inset/>
         <v-dialog v-if="drawer" v-model="dialog" max-width="500px">
           <v-list-tile value="true" slot="activator">
             <v-list-tile-action>
@@ -43,7 +43,7 @@
       color="primary"
       dark
     >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"/>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">{{title}}</router-link>
       </v-toolbar-title>
@@ -69,9 +69,6 @@
         <router-view/>
       </v-container>
     </v-content>
-    <!--     <v-footer app>
-      <span>this is footer</span>
-    </v-footer>-->
   </v-app>
 </template>
 
@@ -115,7 +112,6 @@ export default {
       this.$store.dispatch("auth/inspectToken");
     }
     setInterval(() => this.$store.dispatch("auth/inspectToken"), 280000);
-    console.log("fdfdfdf", this.avatar);
   }
 };
 </script>
