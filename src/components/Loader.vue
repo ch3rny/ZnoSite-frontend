@@ -3,7 +3,7 @@
     <v-layout align-center justify-center fill-height>
       <v-flex>
         <div class="text-xs-center">
-          <v-progress-circular :size="70" :width="7" color="primary" indeterminate></v-progress-circular>
+          <semipolar-spinner :animation-duration="2000" :size="90" color="#0D47A1" class="anime"/>
         </div>
         <br>
         <div class="text-xs-center">
@@ -15,7 +15,12 @@
 </template>
 
 <script>
+import { SemipolarSpinner } from "epic-spinners";
+
 export default {
+  components: {
+    SemipolarSpinner
+  },
   props: {
     loading: Boolean
   }
@@ -26,5 +31,9 @@ export default {
 .loader {
   width: 100%;
   height: 60vh;
+  z-index: 1;
+}
+.anime {
+  margin: 0 auto;
 }
 </style>

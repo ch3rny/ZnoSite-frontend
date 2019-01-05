@@ -7,7 +7,7 @@
     <span v-if="task.zno_type==2">з пробного ЗНО</span>
     <span v-if="task.zno_type==3">з додаткової сесії ЗНО</span>
     <span> {{task.year}} року</span>
-    <span> {{task.theme.name}})</span>
+    <span> ({{task.theme.name}})</span>
   </div>
 </template>
 <!-- prettier-ignore -->

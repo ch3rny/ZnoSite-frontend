@@ -19,6 +19,12 @@
         </v-list-tile-action>
         <v-list-tile-title>Добірки</v-list-tile-title>
       </v-list-tile>
+      <v-list-tile :to="{ name: 'Stat'}">
+        <v-list-tile-action>
+          <v-icon>bar_chart</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title>Статистика</v-list-tile-title>
+      </v-list-tile>
       <v-list-tile @click="logout()">
         <v-list-tile-action>
           <v-icon>input</v-icon>

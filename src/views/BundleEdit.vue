@@ -7,7 +7,7 @@
         </div>
         <v-text-field v-model.trim="Bundle.name" clearable label="Назва"></v-text-field>
         <v-img
-          :src="bundleCover"
+          :src="Bundle.cover"
           height="200px"
           gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
         >
@@ -181,7 +181,7 @@
           wrap
           no-data-text="Немає завдань за вашими критеріями"
         >
-          <v-flex slot="item" slot-scope="props" xs12>
+          <v-flex slot="item" slot-scope="props" xs12 lg6>
             <v-card>
               <v-subheader>
                 <span>
@@ -233,7 +233,7 @@ import THEMES from "@/constants/Themes";
 import YEARS from "@/constants/Years";
 import TYPES from "@/constants/Types";
 import ZNO_TYPES from "@/constants/ZnoTypes";
-import { ROOT_URL, BUNDLE_DEFAULT_COVER } from "@/constants/Const";
+import { ROOT_URL } from "@/constants/Const";
 import api from "@/api";
 import { URL } from "@/api";
 
@@ -255,7 +255,6 @@ export default {
       dialogImage: "",
       confirmButton: false,
       confirmButtonUrl: "",
-      bundleCover: BUNDLE_DEFAULT_COVER,
       ROOT_URL,
       Bundle: {},
       isSaved: false,
@@ -265,7 +264,6 @@ export default {
       checkedYears: [],
       checkedTypes: [],
       checkedZnoTypes: [],
-      url: "",
       THEMES,
       TYPES,
       ZNO_TYPES,
@@ -281,9 +279,6 @@ export default {
     Bundle: {
       handler() {
         this.refreshChosenTasks();
-        if (this.Bundle.cover != null) {
-          this.bundleCover = ROOT_URL + this.Bundle.cover;
-        }
         this.isSaved = false;
       },
       deep: true
@@ -318,7 +313,7 @@ export default {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = e => {
-          this.bundleCover = e.target.result;
+          this.Bundle.cover = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
       }
@@ -343,19 +338,10 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         payload.append("tasks", arr[i]);
       }
-      api.bundles
-        .updateBundle(payload, this.Bundle.id)
-        .then(response => {
-          this.isSaved = true;
-          this.snackbarSave = true;
-          // eslint-disable-next-line
-          console.log(this.isSaved);
-          console.log(response);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.log(error.response);
-        });
+      api.bundles.updateBundle(payload, this.Bundle.id).then(response => {
+        this.isSaved = true;
+        this.snackbarSave = true;
+      });
     },
     confirmExit() {
       this.confirmButton = true;
@@ -365,7 +351,11 @@ export default {
     }
   },
   mounted() {
-    api.bundles.getBundle(this.bundleID).then(res => (this.Bundle = res.data));
+    api.bundles.getBundle(this.bundleID).then(res => {
+      this.Bundle = res.data;
+      this.Bundle.cover = ROOT_URL + res.data.cover;
+    });
+
     this.loadTasks();
   },
   beforeRouteLeave(to, from, next) {

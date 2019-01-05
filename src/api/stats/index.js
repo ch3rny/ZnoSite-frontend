@@ -10,8 +10,15 @@ const getTestAnswers = () => axios.get(
 const postTestAnswer = (payload) => axios.post(
     `${URL}answers/`, payload
 );
+const readTestAnswers = () => axios.get(
+    `${URL}read-answers/`
+)
+
+const deleteAnswers = (id) => axios.delete(`${URL}answers/${id}`)
 
 export default {
     getTestAnswers,
-    postTestAnswer
+    postTestAnswer,
+    deleteAnswers,
+    readTestAnswers
 }

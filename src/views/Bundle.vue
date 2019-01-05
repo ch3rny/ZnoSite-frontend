@@ -19,7 +19,8 @@
             </v-list>
           </v-menu>
           <v-btn flat icon @click="reverseArray()">
-            <v-icon>sort_by_alpha</v-icon>
+            <v-icon v-if="isReversed">arrow_downward</v-icon>
+            <v-icon v-else>arrow_upward</v-icon>
           </v-btn>
         </div>
 
@@ -38,7 +39,7 @@
                   class="white--text"
                   height="150px"
                   gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
-                  :src="getBundleCover(bundle.cover)"
+                  :src="bundle.cover"
                 >
                   <v-container fill-height fluid>
                     <v-layout fill-height>
@@ -46,6 +47,8 @@
                         <span class="headline">{{bundle.name}}</span>
                         <br>
                         <span>К-сть завдань: {{bundle.tasks.length}}</span>
+                        <br>
+                        <span>{{bundle.created_date}}</span>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -140,14 +143,13 @@
 
 <script>
 import api from "@/api";
-import { ROOT_URL, BUNDLE_DEFAULT_COVER } from "@/constants/Const";
+import { ROOT_URL } from "@/constants/Const";
 export default {
   data() {
     return {
       myBundles: [],
       sharedBundles: [],
       ROOT_URL,
-      BUNDLE_DEFAULT_COVER,
       max: 8,
       activeBundle: {},
       removeDialog: false,
@@ -161,7 +163,8 @@ export default {
         { title: "за датою створення", prop: "created_date" },
         { title: "за останніми змінами", prop: "edited_date" },
         { title: "за кількістю завдань", prop: "tasks" }
-      ]
+      ],
+      isReversed: false
     };
   },
   computed: {
@@ -170,16 +173,13 @@ export default {
     }
   },
   methods: {
-    getBundleCover: cover =>
-      cover == null ? BUNDLE_DEFAULT_COVER : ROOT_URL + cover,
     goToRemoveDialog(bundle, index) {
       this.activeBundle = bundle;
       this.removeDialog = true;
       this.index = index;
     },
     deleteBundle(id) {
-      api.bundles.deleteBundle(id);
-      this.myBundles.splice(this.index, 1);
+      api.bundles.deleteBundle(id).then(this.myBundles.splice(this.index, 1));
       this.removeDialog = false;
     },
     createBundle() {
@@ -187,33 +187,44 @@ export default {
         name: this.newBundleName,
         author_id: this.userId
       };
-      api.bundles
-        .createBundle(payload)
-        .then(response => {
-          // eslint-disable-next-line
-          console.log(response);
-          this.myBundles.splice(0, 0, response.data);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.log(error.response);
-        });
+      api.bundles.createBundle(payload).then(response => {
+        this.myBundles.splice(0, 0, response.data);
+      });
       this.createDialog = false;
     },
     reverseArray() {
       this.myBundles = this.myBundles.reverse();
+      this.isReversed = !this.isReversed;
     },
     sortArray(prop) {
-      console.log(prop);
-      this.myBundles = this.myBundles.sort((a, b) =>
-        a[prop] > b[prop] ? 1 : b[prop] > a[prop] ? -1 : 0
-      );
+      //console.log(prop);
+      switch (prop) {
+        case "name":
+        case "created_date":
+        case "edited_date":
+          this.myBundles = this.myBundles.sort((a, b) =>
+            a[prop] > b[prop] ? 1 : b[prop] > a[prop] ? -1 : 0
+          );
+          break;
+        case "tasks":
+          this.myBundles = this.myBundles.sort((a, b) =>
+            a[prop].length > b[prop].length
+              ? 1
+              : b[prop].length > a[prop].length
+              ? -1
+              : 0
+          );
+      }
     }
   },
   mounted() {
-    api.bundles
-      .getUserBundles(this.userId)
-      .then(res => (this.myBundles = res.data));
+    api.bundles.getUserBundles(this.userId).then(
+      res =>
+        (this.myBundles = res.data.map(item => ({
+          ...item,
+          cover: ROOT_URL + item.cover
+        })))
+    );
     //let shared = "?shared=" + this.userId + "&author_id!=" + this.userId;
     //axios.get(url + shared).then(res => (this.sharedBundles = res.data));
   }

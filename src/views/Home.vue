@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md>
-    <v-layout wrap="">
+    <v-layout wrap>
       <v-flex xs12>
         <h3 class="display-3">Вітаємо на сайті Easy__Physic</h3>
         <span class="subheading">Тут ви маєте можливість підготуватися до ЗНО з фізики</span>

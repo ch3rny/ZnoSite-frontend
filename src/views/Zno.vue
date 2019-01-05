@@ -8,6 +8,7 @@
         xs6
         sm4
         md3
+        lg2
         v-for="(zno, index) in ZNO_LIST"
         :key="index"
         @click="goToZnoSolving(zno.year, zno.znoType)"
@@ -63,16 +64,8 @@ div {
 }
 .round {
   border-radius: 10px;
-  background: #00c6ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #0072ff,
-    #00c6ff
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #0072ff,
-    #00c6ff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  max-width: 200px;
+  background: #00c6ff;
+  background: linear-gradient(to top, #0072ff, #00c6ff);
 }
 </style>

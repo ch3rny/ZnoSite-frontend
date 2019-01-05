@@ -131,7 +131,7 @@ import AnswerBlock from "../components/AnswerBlock.vue";
 import Result from "../components/Result.vue";
 import Loader from "../components/Loader.vue";
 import SolutionBlock from "../components/SolutionBlock.vue";
-
+import THEMES from "@/constants/Themes";
 import api from "@/api";
 import { ROOT_URL } from "@/constants/Const";
 
@@ -186,11 +186,19 @@ export default {
         user_answer: value,
         is_true: value == this.tasks[index].correct_answer ? true : false
       };
-      api.stats.postTestAnswer(payload).then(res => console.log(res));
+      api.stats.postTestAnswer(payload);
     },
     changeTask(n) {
       clearTimeout(this.timer);
       this.activeTask = n;
+      // let sortedAnswers = [];
+      // THEMES.forEach((element, i) => {
+      //   sortedAnswers.push({
+      //     theme: element,
+      //     count: this.tasks.filter(item => item.theme.name == element).length
+      //   });
+      // });
+      // console.table(sortedAnswers);
     },
     nextTask() {
       clearTimeout(this.timer);
@@ -214,9 +222,7 @@ export default {
     },
     checkQuery: value => (value != undefined ? value : "")
   },
-  created() {
-    console.log(this.$route.query);
-  },
+  created() {},
   mounted() {
     if (this.$route.name == "BundleSolving") {
       api.bundles
@@ -235,11 +241,13 @@ export default {
           this.checkQuery(this.$route.query.types),
           this.checkQuery(this.$route.query.znotypes)
         )
-        .then(res => (this.tasks = res.data));
+        .then(res => {
+          this.tasks = res.data;
+          this.loading = false;
+        });
     }
   },
   updated() {
-    this.loading = false;
     if (this.tasks.length == 0) this.$router.push({ name: "Empty" });
   }
 };
