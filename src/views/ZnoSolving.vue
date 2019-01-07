@@ -34,8 +34,16 @@
           </div>
         </v-layout>
       </v-flex>
-      <v-flex xs12 sm12 md10 lg9 v-for="(task, index) in tasks" :key="task.key">
-        <v-card class="card__wrapper" v-if=" activeTask==index+1 ">
+      <v-flex
+        xs12
+        sm12
+        md10
+        lg9
+        v-for="(task, index) in tasks"
+        :key="task.key"
+        v-show=" activeTask==index+1 "
+      >
+        <v-card class="card__wrapper">
           <v-subheader>
             <span>{{task.year}}&nbsp;</span>
             <span v-if="task.zno_type==1 ">(Основна сесія)</span>
@@ -64,6 +72,8 @@
             />
           </div>
         </v-card>
+      </v-flex>
+      <v-flex>
         <div class="card__wrapper">
           <v-layout row wrap>
             <v-flex xs6>

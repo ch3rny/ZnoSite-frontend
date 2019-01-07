@@ -189,6 +189,7 @@ export default {
       };
       api.bundles.createBundle(payload).then(response => {
         this.myBundles.splice(0, 0, response.data);
+        this.myBundles[0].cover = ROOT_URL + response.data.cover;
       });
       this.createDialog = false;
     },

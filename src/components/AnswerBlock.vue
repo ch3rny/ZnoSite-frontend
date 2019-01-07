@@ -6,28 +6,22 @@
       <table class="half-padding">
         <tbody>
           <tr>
-            <th>А</th>
-            <th>Б</th>
-            <th>В</th>
-            <th>Г</th>
+            <th v-for="i in 'АБВГ'" :key="i">{{i}}</th>
           </tr>
           <tr>
-            <th>
-              <input type="radio" value="А" v-model="answer1">
-            </th>
-            <th>
-              <input type="radio" value="Б" v-model="answer1">
-            </th>
-            <th>
-              <input type="radio" value="В" v-model="answer1">
-            </th>
-            <th>
-              <input type="radio" value="Г" v-model="answer1">
+            <th v-for="i in 'АБВГ'" :key="i">
+              <input type="radio" :value="i" v-model="answer1">
             </th>
           </tr>
         </tbody>
       </table>
-      <v-btn round color="primary" class="padding" v-on:click="checkAnswerType1">Відповісти</v-btn>
+      <v-btn
+        round
+        depressed
+        color="primary"
+        class="padding"
+        v-on:click="checkAnswerType1"
+      >Відповісти</v-btn>
     </div>
     <div v-if="type==2">
       <br>
@@ -36,94 +30,36 @@
         <tbody>
           <tr>
             <th></th>
-            <th>А</th>
-            <th>Б</th>
-            <th>В</th>
-            <th>Г</th>
-            <th>Д</th>
+            <th v-for="i in 'АБВГД'" :key="i">{{i}}</th>
           </tr>
-          <tr>
-            <th>1</th>
-            <th>
-              <input type="radio" value="А" v-model="answer1">
-            </th>
-            <th>
-              <input type="radio" value="Б" v-model="answer1">
-            </th>
-            <th>
-              <input type="radio" value="В" v-model="answer1">
-            </th>
-            <th>
-              <input type="radio" value="Г" v-model="answer1">
-            </th>
-            <th>
-              <input type="radio" value="Д" v-model="answer1">
-            </th>
-          </tr>
-          <tr>
-            <th>2</th>
-            <th>
-              <input type="radio" value="А" v-model="answer2">
-            </th>
-            <th>
-              <input type="radio" value="Б" v-model="answer2">
-            </th>
-            <th>
-              <input type="radio" value="В" v-model="answer2">
-            </th>
-            <th>
-              <input type="radio" value="Г" v-model="answer2">
-            </th>
-            <th>
-              <input type="radio" value="Д" v-model="answer2">
-            </th>
-          </tr>
-          <tr>
-            <th>3</th>
-            <th>
-              <input type="radio" value="А" v-model="answer3">
-            </th>
-            <th>
-              <input type="radio" value="Б" v-model="answer3">
-            </th>
-            <th>
-              <input type="radio" value="В" v-model="answer3">
-            </th>
-            <th>
-              <input type="radio" value="Г" v-model="answer3">
-            </th>
-            <th>
-              <input type="radio" value="Д" v-model="answer3">
-            </th>
-          </tr>
-          <tr>
-            <th>4</th>
-            <th>
-              <input type="radio" value="А" v-model="answer4">
-            </th>
-            <th>
-              <input type="radio" value="Б" v-model="answer4">
-            </th>
-            <th>
-              <input type="radio" value="В" v-model="answer4">
-            </th>
-            <th>
-              <input type="radio" value="Г" v-model="answer4">
-            </th>
-            <th>
-              <input type="radio" value="Д" v-model="answer4">
+          <tr v-for="i in 4" :key="i">
+            <th>{{i}}</th>
+            <th v-for="j in 'АБВГД'" :key="j">
+              <input type="radio" :value="j" v-model="answer2[i-1]">
             </th>
           </tr>
         </tbody>
       </table>
-      <v-btn round color="primary" class="padding" v-on:click="checkAnswerType2">Відповісти</v-btn>
+      <v-btn
+        round
+        depressed
+        color="primary"
+        class="padding"
+        v-on:click="checkAnswerType2"
+      >Відповісти</v-btn>
     </div>
     <div v-if="(type==3) && (answer.indexOf(' ')<0)">
       <br>
       <v-subheader>Впишіть правильну відповідь:</v-subheader>
       <v-flex xs9 sm6>
         <v-text-field class="half-padding" v-model.trim="answer5" solo></v-text-field>
-        <v-btn round color="primary" class="padding" v-on:click="checkAnswerType4">Відповісти</v-btn>
+        <v-btn
+          round
+          depressed
+          color="primary"
+          class="padding"
+          v-on:click="checkAnswerType4"
+        >Відповісти</v-btn>
       </v-flex>
     </div>
     <div v-if="(type==3) && (answer.indexOf(' ')>0)">
@@ -132,7 +68,13 @@
       <v-layout wrap row>
         <v-flex xs6>
           <v-text-field class="half-padding" v-model.trim="answer5" solo label="1. "></v-text-field>
-          <v-btn round color="primary" class="padding" v-on:click="checkAnswerType3">Відповісти</v-btn>
+          <v-btn
+            round
+            depressed
+            color="primary"
+            class="padding"
+            v-on:click="checkAnswerType3"
+          >Відповісти</v-btn>
         </v-flex>
         <v-flex xs6>
           <v-text-field class="half-padding-right" v-model.trim="answer6" solo label="2. "></v-text-field>
@@ -152,9 +94,7 @@ export default {
   data() {
     return {
       answer1: " ",
-      answer2: " ",
-      answer3: " ",
-      answer4: " ",
+      answer2: [" ", " ", " ", " "],
       answer5: "",
       answer6: ""
     };
@@ -164,9 +104,7 @@ export default {
       this.$emit("checkAnswer", this.answer1);
     },
     checkAnswerType2() {
-      let answer = `1${this.answer1}2${this.answer2}3${this.answer3}4${
-        this.answer4
-      }`;
+      let answer = this.answer2.map((item, index) => index + 1 + item).join("");
       this.$emit("checkAnswer", answer);
     },
     checkAnswerType3() {
@@ -225,7 +163,7 @@ input[type="radio"]:after {
   position: absolute;
 }
 input[type="radio"]:checked:before {
-  background-size: 14px 14px;
+  background-size: 12px 12px;
 }
 input[type="radio"]:focus {
   outline: none;
