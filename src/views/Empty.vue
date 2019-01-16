@@ -1,12 +1,12 @@
 <template>
-  <v-layout justify-center wrap="" align-center>
+  <v-layout justify-center wrap align-center>
     <v-flex xs12 md10 lg9>
       <br>
       <p
         class="text-xs-center title font-weight-medium"
       >На жаль, за вашим запитом немає жодного питання</p>
       <br>
-      <v-layout justify-center wrap="" align-center>
+      <v-layout justify-center wrap align-center>
         <v-flex text-xs-center>
           <v-btn round depressed color="primary" class="resultButton" outline to="/">На головну</v-btn>
         </v-flex>
@@ -25,7 +25,7 @@
   </v-layout>
 </template>
 
-<style>
+<style scoped>
 .resultButton {
   width: 200px;
 }

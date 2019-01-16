@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md>
+  <v-container class="fix">
     <v-layout wrap>
       <v-flex xs12 sm6>
         <v-text-field v-model="searchBundle" label="Пошук" prepend-icon="search" clearable/>
@@ -187,9 +187,10 @@ export default {
         name: this.newBundleName,
         author_id: this.userId
       };
-      api.bundles.createBundle(payload).then(response => {
-        this.myBundles.splice(0, 0, response.data);
-        this.myBundles[0].cover = ROOT_URL + response.data.cover;
+      api.bundles.createBundle(payload).then(res => {
+        this.myBundles.splice(0, 0, res.data);
+        //this.myBundles = [...this.myBundles, res.data];
+        this.myBundles[0].cover = ROOT_URL + res.data.cover;
       });
       this.createDialog = false;
     },
@@ -235,5 +236,8 @@ export default {
 .title {
   margin-top: 16px;
   margin-bottom: 0;
+}
+.fix {
+  width: 1280px;
 }
 </style>

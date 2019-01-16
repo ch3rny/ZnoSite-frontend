@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md>
+  <v-container>
     <v-layout wrap>
       <v-flex xs12 sm6>
         <div>
@@ -235,7 +235,6 @@ import TYPES from "@/constants/Types";
 import ZNO_TYPES from "@/constants/ZnoTypes";
 import { ROOT_URL } from "@/constants/Const";
 import api from "@/api";
-import { URL } from "@/api";
 
 //require("vue2-animate/dist/vue2-animate.min.css");
 
@@ -338,10 +337,9 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         payload.append("tasks", arr[i]);
       }
-      api.bundles.updateBundle(payload, this.Bundle.id).then(response => {
-        this.isSaved = true;
-        this.snackbarSave = true;
-      });
+      api.bundles
+        .updateBundle(payload, this.Bundle.id)
+        .then((this.isSaved = true), (this.snackbarSave = true));
     },
     confirmExit() {
       this.confirmButton = true;
@@ -371,7 +369,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .inputfile {
   width: 0.1px;
   height: 0.1px;

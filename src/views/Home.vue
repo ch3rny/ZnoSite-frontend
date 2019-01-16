@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md>
+  <v-container>
     <v-layout wrap>
       <v-flex xs12>
         <h3 class="display-3">Вітаємо на сайті Easy__Physic</h3>

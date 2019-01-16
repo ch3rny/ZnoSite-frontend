@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md>
+  <v-container>
     <div>
       <p class="title font-weight-medium">Створіть власний тест за наступними параметрами:</p>
     </div>

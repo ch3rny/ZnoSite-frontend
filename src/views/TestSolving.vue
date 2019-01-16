@@ -1,70 +1,62 @@
 <template>
-  <v-container class="noPadding" grid-list-md>
-    <v-slide-y-transition>
-      <v-layout
-        row
-        wrap
-        justify-center
-        v-touch="{ 
+  <v-container class="noPadding">
+    <v-layout
+      row
+      wrap
+      justify-center
+      v-touch="{ 
           left: nextTask,
           right: prevTask
           }"
-      >
-        <Loader :loading="loading"/>
-        <!--Number block-->
-        <v-flex d-flex xs12 md10 lg9 class="card__wrapper">
-          <v-layout justify-center wrap>
-            <div v-if="this.tasks.length>pageSize" @click="prevPage">
-              <div
-                :class="[
+    >
+      <Loader :loading="loading"/>
+      <!--Number block-->
+      <v-flex d-flex xs12 md10 lg9 class="card__wrapper">
+        <v-layout justify-center wrap>
+          <div v-if="this.tasks.length>pageSize" @click="prevPage">
+            <div
+              :class="[
               {number:true},
               {disabled: currentPage==1}
               ]"
-              >❮</div>
-            </div>
+            >❮</div>
+          </div>
+          <div
+            v-for="n in tasks.length"
+            v-show="(n>(currentPage-1)*pageSize) && (n<=currentPage*pageSize)"
+            :key="n"
+            @click="changeTask(n)"
+          >
             <div
-              v-for="n in tasks.length"
-              v-show="(n>(currentPage-1)*pageSize) && (n<=currentPage*pageSize)"
-              :key="n"
-              @click="changeTask(n)"
-            >
-              <div
-                v-ripple
-                :class="[
+              v-ripple
+              :class="[
                 { isActive: activeTask==n },
                 {number: true},
                 {isTrue: userAnswersRight[n-1]==1},
                 {isFalse: userAnswersRight[n-1]==0}
               ]"
-              >{{n}}</div>
-            </div>
-            <div v-if="this.tasks.length>pageSize" @click="nextPage">
-              <div
-                :class="[
+            >{{n}}</div>
+          </div>
+          <div v-if="this.tasks.length>pageSize" @click="nextPage">
+            <div
+              :class="[
               {number:true},
               {disabled:currentPage==pagesTotal}
               ]"
-              >❯</div>
-            </div>
-            <div v-if="showResult" @click="endTest">
-              <div
-                :class="[
+            >❯</div>
+          </div>
+          <div v-if="showResult" @click="endTest">
+            <div
+              :class="[
                 { isActive: activeTask==tasks.length+1 },
                 {number: true}]"
-              >&#931;</div>
-            </div>
-          </v-layout>
-        </v-flex>
-        <!--Number block End-->
-        <v-flex
-          xs12
-          sm12
-          md10
-          lg9
-          v-for="(task, index) in tasks"
-          :key="task.key"
-          v-if="activeTask==index+1"
-        >
+            >&#931;</div>
+          </div>
+        </v-layout>
+      </v-flex>
+      <!--Number block End-->
+      <v-flex xs12 sm12 md10 lg9 v-for="(task, index) in tasks" :key="task.key">
+        <div v-if="activeTask==index+1">
           <v-card class="card__wrapper">
             <v-subheader>
               <task-description :index="index+1" :task="task"/>
@@ -116,12 +108,12 @@
               </v-flex>
             </v-layout>
           </div>
-        </v-flex>
-        <v-flex xs12 sm12 md10 lg9 v-if="showResult && (activeTask > tasks.length)">
-          <Result :all="tasks.length" :answers="userAnswersRight"></Result>
-        </v-flex>
-      </v-layout>
-    </v-slide-y-transition>
+        </div>
+      </v-flex>
+      <v-flex xs12 sm12 md10 lg9 v-if="showResult && (activeTask > tasks.length)">
+        <Result :all="tasks.length" :answers="userAnswersRight"></Result>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -225,13 +217,12 @@ export default {
   created() {},
   mounted() {
     if (this.$route.name == "BundleSolving") {
-      api.bundles
-        .getBundle(this.$route.params.id)
-        .then(res =>
-          api.tasks
-            .getBundleTasks(res.data.tasks)
-            .then(res => (this.tasks = res.data))
-        );
+      api.bundles.getBundle(this.$route.params.id).then(res =>
+        api.tasks.getBundleTasks(res.data.tasks).then(res => {
+          this.tasks = res.data;
+          this.loading = false;
+        })
+      );
     } else {
       api.tasks
         .getTasks(

@@ -65,7 +65,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
-      <v-container class="wrapper">
+      <v-container grid-list-md class="wrapper">
         <router-view/>
       </v-container>
     </v-content>
@@ -110,8 +110,8 @@ export default {
   created() {
     if (this.isLogged) {
       this.$store.dispatch("auth/inspectToken");
+      setInterval(() => this.$store.dispatch("auth/inspectToken"), 280000);
     }
-    setInterval(() => this.$store.dispatch("auth/inspectToken"), 280000);
   }
 };
 </script>
@@ -125,5 +125,9 @@ export default {
 }
 .menu {
   margin-left: -16px;
+}
+.v-content {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 </style>

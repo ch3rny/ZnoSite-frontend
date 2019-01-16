@@ -1,5 +1,5 @@
 <template>
-  <v-container class="noPadding" grid-list-md>
+  <v-container class="noPadding">
     <v-layout
       row
       wrap
@@ -73,7 +73,7 @@
           </div>
         </v-card>
       </v-flex>
-      <v-flex>
+      <v-flex xs12 sm12 md10 lg9 v-if="!loading">
         <div class="card__wrapper">
           <v-layout row wrap>
             <v-flex xs6>

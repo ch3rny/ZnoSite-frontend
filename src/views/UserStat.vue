@@ -1,5 +1,5 @@
 <template>
-  <v-container class="noPadding" grid-list-md>
+  <v-container class="noPadding">
     <v-tabs color="transparent" fixed-tabs>
       <v-tab :key="1">Загальна</v-tab>
       <v-tab-item :key="1">
@@ -190,7 +190,7 @@ export default {
         "#607D8B"
       ];
       let sortedAnswers = [];
-      THEMES.forEach((element, i) => {
+      THEMES.forEach(element => {
         sortedAnswers.push(this.allStat.filter(item => item.theme == element));
       });
       let arr = [];

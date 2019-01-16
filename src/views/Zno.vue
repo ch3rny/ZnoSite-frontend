@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md>
+  <v-container>
     <div>
       <p class="title font-weight-medium">Оберіть тест ЗНО:</p>
     </div>
