@@ -43,32 +43,32 @@
 //import Chart from "../components/Chart.vue";
 
 export default {
-  name: "Result",
-  props: {
-    all: Number,
-    answers: Array
-  },
-  methods: {
-    correct() {
-      return this.answers.filter(n => n > 0).length;
-    },
-    rate() {
-      return ((this.correct() / this.all) * 100).toFixed(2);
-    }
-  }
+	name: 'Result',
+	props: {
+		all: Number,
+		answers: Array
+	},
+	methods: {
+		correct() {
+			return this.answers.filter(n => n > 0).length;
+		},
+		rate() {
+			return ((this.correct() / this.all) * 100).toFixed(2);
+		}
+	}
 };
 </script>
 
 <style scoped>
 .card__wrapper {
-  max-width: 620px;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 12px;
+	max-width: 620px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 12px;
 }
 
 .resultButton {
-  width: 200px;
+	width: 200px;
 }
 </style>

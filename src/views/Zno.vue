@@ -15,9 +15,9 @@
       >
         <v-card class="white--text round">
           <div class="wrapper">
-            <div class="headline inCard text-xs-center">{{zno.year}}</div>
+            <div class="headline inCard text-xs-center">{{ zno.year }}</div>
             <hr>
-            <div class="subheading inCard text-xs-center">{{getTitle(zno.znoType)}}</div>
+            <div class="subheading inCard text-xs-center">{{ getTitle(zno.znoType) }}</div>
           </div>
         </v-card>
       </v-flex>
@@ -26,46 +26,46 @@
 </template>
 
 <script>
-import ZNO_LIST from "@/constants/ZnoList";
+import ZNO_LIST from '@/constants/ZnoList';
 export default {
-  data() {
-    return {
-      ZNO_LIST
-    };
-  },
-  methods: {
-    goToZnoSolving(year, type) {
-      this.$router.push({
-        name: "ZnoSolving",
-        params: { year: year, znotype: type }
-      });
-    },
-    getTitle: type =>
-      type == 1 ? "Основна сесія" : type == 2 ? "Пробне ЗНО" : "Додаткова сесія"
-  }
+	data() {
+		return {
+			ZNO_LIST
+		};
+	},
+	methods: {
+		goToZnoSolving(year, type) {
+			this.$router.push({
+				name: 'ZnoSolving',
+				params: { year: year, znotype: type }
+			});
+		},
+		getTitle: type =>
+			type == 1 ? 'Основна сесія' : type == 2 ? 'Пробне ЗНО' : 'Додаткова сесія'
+	}
 };
 </script>
 
 <style scoped>
 span {
-  margin-left: 12px;
-  cursor: pointer;
-  color: #1976d2;
+	margin-left: 12px;
+	cursor: pointer;
+	color: #1976d2;
 }
 div {
-  margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 .inCard {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 .wrapper {
-  padding: 10px;
-  cursor: pointer;
+	padding: 10px;
+	cursor: pointer;
 }
 .round {
-  border-radius: 10px;
-  max-width: 200px;
-  background: #00c6ff;
-  background: linear-gradient(to top, #0072ff, #00c6ff);
+	border-radius: 10px;
+	max-width: 200px;
+	background: #00c6ff;
+	background: linear-gradient(to top, #0072ff, #00c6ff);
 }
 </style>

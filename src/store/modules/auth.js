@@ -47,11 +47,13 @@ export default {
                   commit("updateJWT", jwt_token);
                 })
                 .catch(err => {
+                  // eslint-disable-next-line
                   console.log(err.response);
                 });
               resolve();
             })
             .catch(err => {
+              // eslint-disable-next-line
               console.log("OH NOES", err);
               reject(err);
             });
@@ -59,12 +61,13 @@ export default {
       });
     },
     logout({ commit }) {
+      // eslint-disable-next-line
       return new Promise((resolve, reject) => {
         if (
           window.gapi &&
           window.gapi.auth2 &&
           window.gapi.auth2.getAuthInstance()
-        ) {
+        ) { // eslint-disable-next-line
           gapi.auth2
             .getAuthInstance()
             .signOut()
@@ -94,6 +97,7 @@ export default {
           this.commit("auth/updateJWT", response.data.token);
         })
         .catch(error => {
+          // eslint-disable-next-line
           console.log(error);
         });
     },

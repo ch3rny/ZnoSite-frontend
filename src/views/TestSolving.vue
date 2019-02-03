@@ -123,7 +123,6 @@ import AnswerBlock from "../components/AnswerBlock.vue";
 import Result from "../components/Result.vue";
 import Loader from "../components/Loader.vue";
 import SolutionBlock from "../components/SolutionBlock.vue";
-import THEMES from "@/constants/Themes";
 import api from "@/api";
 import { ROOT_URL } from "@/constants/Const";
 

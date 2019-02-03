@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
-          <v-layout wrap="">
+          <v-layout wrap>
             <v-flex xs12>
               <v-text-field label="Ваше ім'я" required v-model="name" :rules="nameRules"></v-text-field>
             </v-flex>
@@ -82,8 +82,9 @@ export default {
   },
   computed: {
     token() {
-      return this.$store.state.auth.jwt
-  }},
+      return this.$store.state.auth.jwt;
+    }
+  },
   methods: {
     dialogClose() {
       this.$emit("closeDialog");
@@ -104,7 +105,6 @@ export default {
           formData.append("attachment", this.file, fileName);
         }
         formData.append("unread", true);
-        console.log(this.token)
         api.reviews
           .sendReview(formData, this.token)
           .then(response => {
@@ -114,7 +114,7 @@ export default {
           .catch(error => {
             // eslint-disable-next-line
             console.log(error.response);
-            if (error.response.status==401) {
+            if (error.response.status == 401) {
               this.$router.push({ name: "Empty" });
             }
           });

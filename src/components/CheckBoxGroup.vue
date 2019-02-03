@@ -17,23 +17,23 @@
 
 <script>
 export default {
-  props: {
-    items: Array,
-    label: String
-  },
-  data() {
-    return { checked: [] };
-  },
-  methods: {
-    getLabel: item => (item.name ? item.name : item),
-    getValue: item => (item.value ? item.value : item)
-  }
+	props: {
+		items: Array,
+		label: String
+	},
+	data() {
+		return { checked: [] };
+	},
+	methods: {
+		getLabel: item => (item.name ? item.name : item),
+		getValue: item => (item.value ? item.value : item)
+	}
 };
 </script>
 
 <style scoped>
 .checkbox {
-  padding-left: 8px;
-  margin-top: 4px;
+	padding-left: 8px;
+	margin-top: 4px;
 }
 </style>

@@ -86,86 +86,86 @@
 
 <script>
 export default {
-  name: "AnswerBlock",
-  props: {
-    type: Number,
-    answer: String
-  },
-  data() {
-    return {
-      answer1: " ",
-      answer2: [" ", " ", " ", " "],
-      answer5: "",
-      answer6: ""
-    };
-  },
-  methods: {
-    checkAnswerType1() {
-      this.$emit("checkAnswer", this.answer1);
-    },
-    checkAnswerType2() {
-      let answer = this.answer2.map((item, index) => index + 1 + item).join("");
-      this.$emit("checkAnswer", answer);
-    },
-    checkAnswerType3() {
-      let answer = `${this.answer5} ${this.answer6}`;
-      answer = answer.replace(/\./g, ",");
-      this.$emit("checkAnswer", answer);
-    },
-    checkAnswerType4() {
-      this.answer5 = this.answer5.replace(/\./g, ",");
-      this.$emit("checkAnswer", this.answer5);
-    }
-  }
+	name: 'AnswerBlock',
+	props: {
+		type: Number,
+		answer: String
+	},
+	data() {
+		return {
+			answer1: ' ',
+			answer2: [' ', ' ', ' ', ' '],
+			answer5: '',
+			answer6: ''
+		};
+	},
+	methods: {
+		checkAnswerType1() {
+			this.$emit('checkAnswer', this.answer1);
+		},
+		checkAnswerType2() {
+			let answer = this.answer2.map((item, index) => index + 1 + item).join('');
+			this.$emit('checkAnswer', answer);
+		},
+		checkAnswerType3() {
+			let answer = `${this.answer5} ${this.answer6}`;
+			answer = answer.replace(/\./g, ',');
+			this.$emit('checkAnswer', answer);
+		},
+		checkAnswerType4() {
+			this.answer5 = this.answer5.replace(/\./g, ',');
+			this.$emit('checkAnswer', this.answer5);
+		}
+	}
 };
 </script>
 <style scoped>
 .half-padding {
-  padding-left: 8px;
+	padding-left: 8px;
 }
 .padding {
-  padding-left: 16px;
+	padding-left: 16px;
 }
 .half-padding-right {
-  padding-right: 8px;
+	padding-right: 8px;
 }
-input[type="radio"] {
-  position: relative;
-  top: 2px;
-  left: 2px;
-  margin: 0 8px;
-  cursor: pointer;
+input[type='radio'] {
+	position: relative;
+	top: 2px;
+	left: 2px;
+	margin: 0 8px;
+	cursor: pointer;
 }
-input[type="radio"]:before {
-  content: "";
-  background-color: white;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: solid 2px #3486d7;
-  display: inline-block;
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  background-image: radial-gradient(circle, #3486d7 40%, white 50%);
-  background-size: 0;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  will-change: background-size;
-  z-index: 2;
+input[type='radio']:before {
+	content: '';
+	background-color: white;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	border: solid 2px #3486d7;
+	display: inline-block;
+	position: absolute;
+	top: -2px;
+	left: -2px;
+	background-image: radial-gradient(circle, #3486d7 40%, white 50%);
+	background-size: 0;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	will-change: background-size;
+	z-index: 2;
 }
-input[type="radio"]:after {
-  content: "";
-  width: 16px;
-  height: 16px;
-  background: white;
-  border-radius: 50%;
-  position: absolute;
+input[type='radio']:after {
+	content: '';
+	width: 16px;
+	height: 16px;
+	background: white;
+	border-radius: 50%;
+	position: absolute;
 }
-input[type="radio"]:checked:before {
-  background-size: 12px 12px;
+input[type='radio']:checked:before {
+	background-size: 12px 12px;
 }
-input[type="radio"]:focus {
-  outline: none;
+input[type='radio']:focus {
+	outline: none;
 }
 </style>
