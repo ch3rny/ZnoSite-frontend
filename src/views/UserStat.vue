@@ -1,15 +1,9 @@
 <template>
   <v-container class="noPadding">
-    <v-tabs
-      color="transparent"
-      fixed-tabs
-    >
+    <v-tabs color="transparent" fixed-tabs>
       <v-tab :key="1">Загальна</v-tab>
       <v-tab-item :key="1">
-        <div
-          :style="{'margin-top': '10px'}"
-          v-if="!loading"
-        >
+        <div :style="{'margin-top': '10px'}" v-if="!loading">
           <div>
             <p class="title font-weight-medium">Статистика ваших відповідей</p>
           </div>
@@ -19,75 +13,41 @@
           <!-- <p class="body-1">Lorem ipsum dolor</p>
           <p class="body-1">Lorem ipsum dolor</p>-->
         </div>
-        <v-layout
-          row
-          wrap
-        >
-          <loader :loading="loading" />
-          <v-flex
-            xs12
-            sm6
-            v-if="!loading"
-          >
+        <v-layout row wrap>
+          <loader :loading="loading"/>
+          <v-flex xs12 sm6 v-if="!loading">
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Розподіл вірних/хибних відповідей</p>
               </v-card-title>
-              <doughnut-chart
-                :datacollection="trueFalseChart"
-                :height="300"
-              />
+              <doughnut-chart :datacollection="trueFalseChart" :height="300"/>
             </v-card>
           </v-flex>
-          <v-flex
-            xs12
-            sm6
-            v-if="!loading"
-          >
+          <v-flex xs12 sm6 v-if="!loading">
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Розподіл відповідей за темами</p>
               </v-card-title>
-              <doughnut-chart
-                :datacollection="testChart"
-                :height="500"
-              />
+              <doughnut-chart :datacollection="testChart" :height="500"/>
             </v-card>
           </v-flex>
-          <v-flex
-            xs12
-            v-if="!loading"
-          >
+          <v-flex xs12 v-if="!loading">
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Розподіл вірних/хибних відповідей за темами</p>
               </v-card-title>
-              <horizontal-bar-chart
-                :datacollection="answerThemesChart"
-                :height="500"
-              />
+              <horizontal-bar-chart :datacollection="answerThemesChart" :height="500"/>
             </v-card>
           </v-flex>
           <!-- calendar -->
-          <v-flex
-            xs12
-            v-if="!loading"
-          >
+          <v-flex xs12 v-if="!loading">
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Історія відповідей</p>
               </v-card-title>
               <v-container grid-list-md>
-                <v-layout
-                  :column="$vuetify.breakpoint.smAndDown"
-                  wrap
-                  align-content-space-between
-                >
-                  <v-flex
-                    xs12
-                    sm5
-                    class="centered"
-                  >
+                <v-layout :column="$vuetify.breakpoint.smAndDown" wrap align-content-space-between>
+                  <v-flex xs12 sm5 class="centered">
                     <v-date-picker
                       locale="uk-UA"
                       ref="picker"
@@ -96,30 +56,17 @@
                       event-color="green lighten-1"
                     ></v-date-picker>
                   </v-flex>
-                  <v-flex
-                    xs12
-                    sm7
-                    class="centered"
-                  >
+                  <v-flex xs12 sm7 class="centered">
                     <div class="title text-xs-center">Відповіді за {{date}}</div>
                     <div
                       v-if="dailyAnswers.length>0"
                       class="subheading text-xs-center centered"
                     >Цього дня Ви мали такі результати
                       <v-expansion-panel class="task-wrapper centered">
-                        <v-expansion-panel-content
-                          v-for="item in dailyAnswers"
-                          :key="item.id"
-                        >
+                        <v-expansion-panel-content v-for="item in dailyAnswers" :key="item.id">
                           <div slot="header">
-                            <v-icon
-                              v-if="item.is_true"
-                              color="green"
-                            >done</v-icon>
-                            <v-icon
-                              v-else
-                              color="red"
-                            >clear</v-icon>
+                            <v-icon v-if="item.is_true" color="green">done</v-icon>
+                            <v-icon v-else color="red">clear</v-icon>
                             №{{item.task.number}}.({{item.task.year}} {{getTitle(item.task.zno_type)}})
                           </div>
                           <v-card>
@@ -277,10 +224,6 @@ export default {
 		}
 	},
 	created() {
-		// for (let i = 1; i < 30; i++) {
-		//   api.stats.deleteAnswers(i);
-		//   console.log("udolil", i);
-		// }
 		api.stats.readTestAnswers().then(res => {
 			this.allStat = res.data;
 			this.allStat.forEach(item =>
@@ -297,11 +240,6 @@ export default {
 </script>
 
 <style scoped>
-/* .placeholder {
-  background-color: #656780;
-  height: 190px;
-  margin: 10px;
-} */
 .v-card {
 	border-radius: 10px !important ;
 }

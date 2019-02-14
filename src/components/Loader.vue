@@ -1,26 +1,10 @@
 <template>
-  <v-flex
-    d-flex
-    xs12
-    md10
-    lg9
-    class="loader"
-    v-if="loading"
-  >
-    <v-layout
-      align-center
-      justify-center
-      fill-height
-    >
+  <v-flex d-flex xs12 md10 lg9 class="loader" v-if="loading">
+    <v-layout align-center justify-center fill-height>
       <v-flex class="sinusoid">
         <div class="text-xs-center">
           <div class="wrapper">
-            <div
-              v-for="i of 11"
-              :id="`ball${13-i}`"
-              class="ball"
-              :key="i"
-            ></div>
+            <div v-for="i of 11" :id="`ball${13-i}`" class="ball" :key="i"></div>
           </div>
         </div>
         <br>
@@ -33,12 +17,7 @@
 </template>
 
 <script>
-import { SemipolarSpinner } from 'epic-spinners';
-
 export default {
-	components: {
-		SemipolarSpinner
-	},
 	props: {
 		loading: Boolean
 	}
@@ -52,7 +31,7 @@ export default {
 	z-index: 1;
 }
 .sinusoid {
-	width: 210px;
+	width: 250px;
 }
 .anime {
 	margin: 0 auto;

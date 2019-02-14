@@ -174,7 +174,6 @@
         <v-data-iterator
           :items="tasks"
           content-tag="v-layout"
-          class="card__wrapper"
           :rows-per-page-items="rowsPerPageItems"
           :pagination.sync="pagination"
           row
@@ -182,7 +181,7 @@
           no-data-text="Немає завдань за вашими критеріями"
         >
           <v-flex slot="item" slot-scope="props" xs12 lg6>
-            <v-card>
+            <v-card class="card__wrapper">
               <v-subheader>
                 <span>
                   <span>Завдання № {{props.item.number}}&nbsp;</span>
@@ -228,180 +227,181 @@
 </template>
 
 <script>
-import { transliterate } from "inflected";
-import THEMES from "@/constants/Themes";
-import YEARS from "@/constants/Years";
-import TYPES from "@/constants/Types";
-import ZNO_TYPES from "@/constants/ZnoTypes";
-import { ROOT_URL } from "@/constants/Const";
-import api from "@/api";
+import { transliterate } from 'inflected';
+import THEMES from '@/constants/Themes';
+import YEARS from '@/constants/Years';
+import TYPES from '@/constants/Types';
+import ZNO_TYPES from '@/constants/ZnoTypes';
+import { ROOT_URL } from '@/constants/Const';
+import api from '@/api';
 
 //require("vue2-animate/dist/vue2-animate.min.css");
 
 export default {
-  data() {
-    return {
-      index: null,
-      rowsPerPageItems: [10],
-      pagination: {
-        rowsPerPage: 10
-      },
-      snackbarAdd: false,
-      snackbarDelete: false,
-      snackbarSave: false,
-      imageDialog: false,
-      saveDialog: false,
-      dialogImage: "",
-      confirmButton: false,
-      confirmButtonUrl: "",
-      ROOT_URL,
-      Bundle: {},
-      isSaved: false,
-      tasks: [],
-      chosenTasks: [],
-      checkedThemes: [],
-      checkedYears: [],
-      checkedTypes: [],
-      checkedZnoTypes: [],
-      THEMES,
-      TYPES,
-      ZNO_TYPES,
-      YEARS
-    };
-  },
-  computed: {
-    bundleID() {
-      return this.$route.params.id;
-    }
-  },
-  watch: {
-    Bundle: {
-      handler() {
-        this.refreshChosenTasks();
-        this.isSaved = false;
-      },
-      deep: true
-    }
-  },
-  methods: {
-    loadTasks() {
-      api.tasks
-        .getTasks(
-          this.checkedYears,
-          this.checkedThemes,
-          this.checkedTypes,
-          this.checkedZnoTypes
-        )
-        .then(res => (this.tasks = res.data));
-    },
-    refreshChosenTasks() {
-      if (this.Bundle.tasks.length > 0) {
-        api.tasks
-          .getBundleTasks(this.Bundle.tasks)
-          .then(res => (this.chosenTasks = res.data));
-      } else {
-        this.chosenTasks = [];
-      }
-    },
-    openImageDialog(image) {
-      this.imageDialog = true;
-      this.dialogImage = ROOT_URL + image;
-    },
-    previewImage() {
-      var input = this.$refs.file;
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = e => {
-          this.Bundle.cover = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    },
-    deleteTask(index) {
-      this.Bundle.tasks.splice(index, 1);
-      this.snackbarDelete = true;
-    },
-    addTask(id) {
-      this.Bundle.tasks.push(id);
-      this.snackbarAdd = true;
-    },
-    saveBundle() {
-      let payload = new FormData();
-      payload.append("name", this.Bundle.name);
-      if (this.$refs.file.files[0]) {
-        let fileName = transliterate(this.$refs.file.files[0].name);
-        payload.append("cover", this.$refs.file.files[0], fileName);
-      }
-      payload.append("edited_date", new Date().toISOString());
-      var arr = this.Bundle.tasks;
-      for (var i = 0; i < arr.length; i++) {
-        payload.append("tasks", arr[i]);
-      }
-      api.bundles
-        .updateBundle(payload, this.Bundle.id)
-        .then((this.isSaved = true), (this.snackbarSave = true));
-    },
-    confirmExit() {
-      this.confirmButton = true;
-      this.$router.push({
-        path: this.confirmButtonUrl
-      });
-    }
-  },
-  mounted() {
-    api.bundles.getBundle(this.bundleID).then(res => {
-      this.Bundle = res.data;
-      this.Bundle.cover = ROOT_URL + res.data.cover;
-    });
+	data() {
+		return {
+			index: null,
+			rowsPerPageItems: [10],
+			pagination: {
+				rowsPerPage: 10
+			},
+			snackbarAdd: false,
+			snackbarDelete: false,
+			snackbarSave: false,
+			imageDialog: false,
+			saveDialog: false,
+			dialogImage: '',
+			confirmButton: false,
+			confirmButtonUrl: '',
+			ROOT_URL,
+			Bundle: {},
+			isSaved: false,
+			tasks: [],
+			chosenTasks: [],
+			checkedThemes: [],
+			checkedYears: [],
+			checkedTypes: [],
+			checkedZnoTypes: [],
+			THEMES,
+			TYPES,
+			ZNO_TYPES,
+			YEARS
+		};
+	},
+	computed: {
+		bundleID() {
+			return this.$route.params.id;
+		}
+	},
+	watch: {
+		Bundle: {
+			handler() {
+				this.refreshChosenTasks();
+				this.isSaved = false;
+			},
+			deep: true
+		}
+	},
+	methods: {
+		loadTasks() {
+			api.tasks
+				.getTasks(
+					this.checkedYears,
+					this.checkedThemes,
+					this.checkedTypes,
+					this.checkedZnoTypes
+				)
+				.then(res => (this.tasks = res.data));
+		},
+		refreshChosenTasks() {
+			if (this.Bundle.tasks.length > 0) {
+				api.tasks
+					.getBundleTasks(this.Bundle.tasks)
+					.then(res => (this.chosenTasks = res.data));
+			} else {
+				this.chosenTasks = [];
+			}
+		},
+		openImageDialog(image) {
+			this.imageDialog = true;
+			this.dialogImage = ROOT_URL + image;
+		},
+		previewImage() {
+			var input = this.$refs.file;
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = e => {
+					this.Bundle.cover = e.target.result;
+				};
+				reader.readAsDataURL(input.files[0]);
+			}
+		},
+		deleteTask(index) {
+			this.Bundle.tasks.splice(index, 1);
+			this.snackbarDelete = true;
+		},
+		addTask(id) {
+			this.Bundle.tasks.push(id);
+			this.snackbarAdd = true;
+		},
+		saveBundle() {
+			let payload = new FormData();
+			payload.append('name', this.Bundle.name);
+			if (this.$refs.file.files[0]) {
+				let fileName = transliterate(this.$refs.file.files[0].name);
+				payload.append('cover', this.$refs.file.files[0], fileName);
+			}
+			payload.append('edited_date', new Date().toISOString());
+			this.Bundle.tasks.forEach(item => payload.append('tasks', item));
+			// var arr = this.Bundle.tasks;
+			// for (var i = 0; i < arr.length; i++) {
+			// 	payload.append('tasks', arr[i]);
+			// }
+			api.bundles
+				.updateBundle(payload, this.Bundle.id)
+				.then((this.isSaved = true), (this.snackbarSave = true));
+		},
+		confirmExit() {
+			this.confirmButton = true;
+			this.$router.push({
+				path: this.confirmButtonUrl
+			});
+		}
+	},
+	mounted() {
+		api.bundles.getBundle(this.bundleID).then(res => {
+			this.Bundle = res.data;
+			this.Bundle.cover = ROOT_URL + res.data.cover;
+		});
 
-    this.loadTasks();
-  },
-  beforeRouteLeave(to, from, next) {
-    if (!this.isSaved) {
-      this.saveDialog = true;
-      this.confirmButtonUrl = to.path;
-      if (this.confirmButton) {
-        next();
-      }
-    } else {
-      next();
-    }
-  }
+		this.loadTasks();
+	},
+	beforeRouteLeave(to, from, next) {
+		if (!this.isSaved) {
+			this.saveDialog = true;
+			this.confirmButtonUrl = to.path;
+			if (this.confirmButton) {
+				next();
+			}
+		} else {
+			next();
+		}
+	}
 };
 </script>
 <style scoped>
 .inputfile {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }
 img {
-  width: 100%;
-  max-width: 600px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+	width: 100%;
+	max-width: 600px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 .card__wrapper {
-  max-width: 620px;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 12px;
+	max-width: 620px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 12px;
 }
 .noPadding {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 .pointer {
-  cursor: pointer;
+	cursor: pointer;
 }
 .kostyl {
-  height: 56px;
+	height: 56px;
 }
 .z {
-  z-index: 1000;
+	z-index: 1000;
 }
 </style>

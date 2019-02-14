@@ -65,7 +65,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
-      <v-container grid-list-md class="wrapper">
+      <v-container grid-list-md>
         <router-view/>
       </v-container>
     </v-content>
@@ -73,61 +73,57 @@
 </template>
 
 <script>
-import menu from "@/constants/Menu";
-import Feedback from "@/components/Feedback.vue";
-import UserPanel from "@/components/UserPanel";
+import menu from '@/constants/Menu';
+import Feedback from '@/components/Feedback.vue';
+import UserPanel from '@/components/UserPanel';
 
 export default {
-  name: "App",
-  components: {
-    Feedback,
-    UserPanel
-  },
-  data() {
-    return {
-      drawer: null,
-      items: menu,
-      title: "Easy__Physic",
-      dialog: false
-    };
-  },
-  computed: {
-    timeLeft() {
-      return this.$store.state.znoTimer.timeLeft;
-    },
-    isLogged() {
-      return this.$store.state.auth.user != null;
-    },
-    avatar() {
-      return this.$store.state.auth.avatar;
-    }
-  },
-  methods: {
-    login() {
-      this.$store.dispatch("auth/login");
-    }
-  },
-  created() {
-    if (this.isLogged) {
-      this.$store.dispatch("auth/inspectToken");
-      setInterval(() => this.$store.dispatch("auth/inspectToken"), 280000);
-    }
-  }
+	name: 'App',
+	components: {
+		Feedback,
+		UserPanel
+	},
+	data() {
+		return {
+			drawer: null,
+			items: menu,
+			title: 'Easy__Physic',
+			dialog: false
+		};
+	},
+	computed: {
+		timeLeft() {
+			return this.$store.state.znoTimer.timeLeft;
+		},
+		isLogged() {
+			return this.$store.state.auth.user != null;
+		},
+		avatar() {
+			return this.$store.state.auth.avatar;
+		}
+	},
+	methods: {
+		login() {
+			this.$store.dispatch('auth/login');
+		}
+	},
+	created() {
+		if (this.isLogged) {
+			this.$store.dispatch('auth/inspectToken');
+			setInterval(() => this.$store.dispatch('auth/inspectToken'), 280000);
+		}
+	}
 };
 </script>
 <style scoped>
-.wrapper {
-  padding-left: 6px;
-  padding-right: 6px;
-}
 .v-btn {
-  text-transform: none;
+	text-transform: none;
 }
 .menu {
-  margin-left: -16px;
+	margin-left: -16px;
 }
 .v-content {
-  max-width: 1280px;
-  margin: 0 auto;
+	max-width: 1280px;
+	margin: 0 auto;
 }
 </style>

@@ -13,12 +13,9 @@
         :key="index"
         @click="goToZnoSolving(zno.year, zno.znoType)"
       >
-        <v-card class="white--text round">
-          <div class="wrapper">
-            <div class="headline inCard text-xs-center">{{ zno.year }}</div>
-            <hr>
-            <div class="subheading inCard text-xs-center">{{ getTitle(zno.znoType) }}</div>
-          </div>
+        <v-card class="mx-auto card" color="#26c6da" dark>
+          <v-card-text class="text-xs-center pb-0 headline font-weight-bold">{{zno.year}}</v-card-text>
+          <v-card-text class="text-xs-center type title font-weight-light">{{getTitle(zno.znoType)}}</v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -41,31 +38,16 @@ export default {
 			});
 		},
 		getTitle: type =>
-			type == 1 ? 'Основна сесія' : type == 2 ? 'Пробне ЗНО' : 'Додаткова сесія'
+			type == 1 ? 'Основна сесія' : type == 2 ? 'Пробне ЗНО' : 'Дод. сесія'
 	}
 };
 </script>
 
 <style scoped>
-span {
-	margin-left: 12px;
-	cursor: pointer;
-	color: #1976d2;
-}
-div {
-	margin-bottom: 10px;
-}
-.inCard {
-	margin-bottom: 0;
-}
-.wrapper {
-	padding: 10px;
-	cursor: pointer;
-}
-.round {
+.card {
 	border-radius: 10px;
-	max-width: 200px;
 	background: #00c6ff;
 	background: linear-gradient(to top, #0072ff, #00c6ff);
+	cursor: pointer;
 }
 </style>
