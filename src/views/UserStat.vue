@@ -93,7 +93,21 @@
       </v-tab-item>
       <v-tab :key="2">ЗНО</v-tab>
       <v-tab-item :key="2">
-        <div></div>
+        <div :style="{'margin-top': '10px'}" v-if="!loading">
+          <div>
+            <p class="title font-weight-medium">Статистика ваших відповідей</p>
+          </div>
+        </div>
+        <v-layout row wrap>
+          <v-flex xs12 v-if="!loading">
+            <v-card>
+              <v-card-title>
+                <p class="title inCard text-xs-center">Розподіл вірних/хибних відповідей за темами</p>
+              </v-card-title>
+              <line-chart :datacollection="answerThemesChart2"/>
+            </v-card>
+          </v-flex>
+        </v-layout>
       </v-tab-item>
     </v-tabs>
   </v-container>
@@ -102,6 +116,7 @@
 <script>
 import DoughnutChart from '../components/Charts/DoughnutChart.vue';
 import HorizontalBarChart from '../components/Charts/HorizontalBarChart.vue';
+import LineChart from '../components/Charts/LineChart.vue';
 import SolutionBlock from '../components/SolutionBlock.vue';
 import Loader from '../components/Loader.vue';
 import THEMES from '@/constants/Themes';
@@ -113,7 +128,8 @@ export default {
 		DoughnutChart,
 		HorizontalBarChart,
 		Loader,
-		SolutionBlock
+		SolutionBlock,
+		LineChart
 	},
 	data() {
 		return {
@@ -121,6 +137,7 @@ export default {
 			loading: true,
 			trueFalseChart: {},
 			answerThemesChart: {},
+			answerThemesChart2: {},
 			testChart: {},
 			trueAnswersCount: 0,
 			falseAnswersCount: 0,
@@ -219,6 +236,11 @@ export default {
 			this.answerThemesChart = {
 				labels: ['Правильних', 'Неправильних'],
 				datasets: answerThemesChartData
+			};
+			this.answerThemesChart2 = {
+				label: 'Data One',
+				backgroundColor: '#f87979',
+				data: [40, 39, 10, 40, 39, 80, 40]
 			};
 			//
 		}
