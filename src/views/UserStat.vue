@@ -1,21 +1,20 @@
 <template>
-  <v-container class="noPadding">
-    <v-tabs color="transparent" fixed-tabs>
-      <v-tab :key="1">Загальна</v-tab>
-      <v-tab-item :key="1">
-        <div :style="{'margin-top': '10px'}" v-if="!loading">
-          <div>
-            <p class="title font-weight-medium">Статистика ваших відповідей</p>
-          </div>
-          <p class="body-1">Всього відповідей: {{allStat.length}}</p>
-          <p class="body-1">Вірних/хибних: {{trueAnswersCount}}/{{falseAnswersCount}}</p>
-          <p class="body-1">Відсоток успішності: {{sucessPercent}}%</p>
-          <!-- <p class="body-1">Lorem ipsum dolor</p>
-          <p class="body-1">Lorem ipsum dolor</p>-->
-        </div>
+  <v-container>
+    <loader :loading="loading" v-if="loading"/>
+    <v-tabs v-else color="transparent" fixed-tabs>
+      <v-tab>Загальна</v-tab>
+      <v-tab-item>
         <v-layout row wrap>
-          <loader :loading="loading"/>
-          <v-flex xs12 sm6 v-if="!loading">
+          <v-flex xs12 :style="{'margin-top': '10px'}">
+            <div>
+              <p class="title font-weight-medium">Статистика ваших відповідей</p>
+            </div>
+            <p class="body-1">Всього відповідей: {{allStat.length}}</p>
+            <p class="body-1">Вірних/хибних: {{trueAnswersCount}}/{{falseAnswersCount}}</p>
+            <p class="body-1">Відсоток успішності: {{sucessPercent}}%</p>
+          </v-flex>
+
+          <v-flex xs12 sm6>
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Розподіл вірних/хибних відповідей</p>
@@ -23,7 +22,7 @@
               <doughnut-chart :datacollection="trueFalseChart" :height="300"/>
             </v-card>
           </v-flex>
-          <v-flex xs12 sm6 v-if="!loading">
+          <v-flex xs12 sm6>
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Розподіл відповідей за темами</p>
@@ -31,7 +30,7 @@
               <doughnut-chart :datacollection="testChart" :height="500"/>
             </v-card>
           </v-flex>
-          <v-flex xs12 v-if="!loading">
+          <v-flex xs12>
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Розподіл вірних/хибних відповідей за темами</p>
@@ -40,7 +39,7 @@
             </v-card>
           </v-flex>
           <!-- calendar -->
-          <v-flex xs12 v-if="!loading">
+          <v-flex xs12>
             <v-card>
               <v-card-title>
                 <p class="title inCard text-xs-center">Історія відповідей</p>
@@ -67,7 +66,7 @@
                           <div slot="header">
                             <v-icon v-if="item.is_true" color="green">done</v-icon>
                             <v-icon v-else color="red">clear</v-icon>
-                            №{{item.task.number}}.({{item.task.year}} {{getTitle(item.task.zno_type)}})
+                            №{{item.task.number}}.({{item.task.year}} {{getZnoType(item.task.zno_type)}})
                           </div>
                           <v-card>
                             <v-img :src="ROOT_URL + item.task.task_image"></v-img>
@@ -91,9 +90,23 @@
           </v-flex>
         </v-layout>
       </v-tab-item>
-      <v-tab :key="2">ЗНО</v-tab>
-      <v-tab-item :key="2">
-        <div></div>
+      <v-tab>ЗНО</v-tab>
+      <v-tab-item lazy>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <div :style="{'margin-top': '10px'}">
+              <p class="title font-weight-medium">Статистика результатів ЗНО</p>
+            </div>
+          </v-flex>
+          <v-flex xs12 sm6>
+            <v-card>
+              <v-card-title>
+                <p class="title inCard text-xs-center">Розподіл балів ЗНО за 200-бальною шкалою</p>
+              </v-card-title>
+              <!-- <line-chart :datacollection="znoChart" :height="300"/> -->
+            </v-card>
+          </v-flex>
+        </v-layout>
       </v-tab-item>
     </v-tabs>
   </v-container>
@@ -102,25 +115,31 @@
 <script>
 import DoughnutChart from '../components/Charts/DoughnutChart.vue';
 import HorizontalBarChart from '../components/Charts/HorizontalBarChart.vue';
+import LineChart from '../components/Charts/LineChart.vue';
 import SolutionBlock from '../components/SolutionBlock.vue';
 import Loader from '../components/Loader.vue';
 import THEMES from '@/constants/Themes';
 import { ROOT_URL } from '@/constants/Const';
 import api from '@/api';
+import { getZnoType } from '@/mixins/zno-type';
 
 export default {
 	components: {
 		DoughnutChart,
 		HorizontalBarChart,
 		Loader,
-		SolutionBlock
+		SolutionBlock,
+		LineChart
 	},
+	mixins: [getZnoType],
 	data() {
 		return {
 			allStat: [],
+			znoStat: [],
 			loading: true,
 			trueFalseChart: {},
 			answerThemesChart: {},
+			//znoChart: {},
 			testChart: {},
 			trueAnswersCount: 0,
 			falseAnswersCount: 0,
@@ -129,7 +148,8 @@ export default {
 			ROOT_URL,
 			//
 			date: null,
-			arrayEvents: []
+			arrayEvents: [],
+			activeTab: 0
 		};
 	},
 	watch: {
@@ -143,12 +163,6 @@ export default {
 		}
 	},
 	methods: {
-		getTitle: type =>
-			type == 1
-				? 'Основна сесія'
-				: type == 2
-				? 'Пробне ЗНО'
-				: 'Додаткова сесія',
 		loadChartData() {
 			//график правильных-неправильных
 			this.trueAnswersCount = this.allStat.filter(item => item.is_true).length;
@@ -220,10 +234,30 @@ export default {
 				labels: ['Правильних', 'Неправильних'],
 				datasets: answerThemesChartData
 			};
+			// let zno200 = [];
+			// let znoDates = [];
+			// this.znoStat.forEach(item => {
+			// 	zno200.push(item.zno_result == 'Не склав' ? 0 : item.zno_result);
+			// 	znoDates.push(new Date(item.date).toISOString().substr(0, 10));
+			// });
+			// this.znoChart = {
+			// 	labels: znoDates,
+			// 	datasets: [
+			// 		{
+			// 			label: 'Бали ЗНО',
+			// 			backgroundColor: '#f87979',
+			// 			data: zno200
+			// 		}
+			// 	]
+			// };
+
 			//
 		}
 	},
 	created() {
+		// api.stats.getZnoResult().then(res => {
+		// 	this.znoStat = res.data;
+		// });
 		api.stats.readTestAnswers().then(res => {
 			this.allStat = res.data;
 			this.allStat.forEach(item =>
@@ -252,5 +286,9 @@ export default {
 }
 .task-wrapper {
 	max-width: 600px;
+}
+.full {
+	width: 100%;
+	background-color: green;
 }
 </style>

@@ -15,7 +15,9 @@
       >
         <v-card class="mx-auto card" color="#26c6da" dark>
           <v-card-text class="text-xs-center pb-0 headline font-weight-bold">{{zno.year}}</v-card-text>
-          <v-card-text class="text-xs-center type title font-weight-light">{{getTitle(zno.znoType)}}</v-card-text>
+          <v-card-text
+            class="text-xs-center pt-0 body-2 font-weight-light"
+          >{{getZnoType(zno.znoType)}}</v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -24,21 +26,21 @@
 
 <script>
 import ZNO_LIST from '@/constants/ZnoList';
+import { getZnoType } from '@/mixins/zno-type';
 export default {
 	data() {
 		return {
 			ZNO_LIST
 		};
 	},
+	mixins: [getZnoType],
 	methods: {
 		goToZnoSolving(year, type) {
 			this.$router.push({
 				name: 'ZnoSolving',
 				params: { year: year, znotype: type }
 			});
-		},
-		getTitle: type =>
-			type == 1 ? 'Основна сесія' : type == 2 ? 'Пробне ЗНО' : 'Дод. сесія'
+		}
 	}
 };
 </script>

@@ -333,10 +333,6 @@ export default {
 			}
 			payload.append('edited_date', new Date().toISOString());
 			this.Bundle.tasks.forEach(item => payload.append('tasks', item));
-			// var arr = this.Bundle.tasks;
-			// for (var i = 0; i < arr.length; i++) {
-			// 	payload.append('tasks', arr[i]);
-			// }
 			api.bundles
 				.updateBundle(payload, this.Bundle.id)
 				.then((this.isSaved = true), (this.snackbarSave = true));

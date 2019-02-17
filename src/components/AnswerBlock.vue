@@ -102,19 +102,29 @@ export default {
 	methods: {
 		checkAnswerType1() {
 			this.$emit('checkAnswer', this.answer1);
+			this.clearAnswers();
 		},
 		checkAnswerType2() {
 			let answer = this.answer2.map((item, index) => index + 1 + item).join('');
 			this.$emit('checkAnswer', answer);
+			this.clearAnswers();
 		},
 		checkAnswerType3() {
 			let answer = `${this.answer5} ${this.answer6}`;
 			answer = answer.replace(/\./g, ',');
 			this.$emit('checkAnswer', answer);
+			this.clearAnswers();
 		},
 		checkAnswerType4() {
 			this.answer5 = this.answer5.replace(/\./g, ',');
 			this.$emit('checkAnswer', this.answer5);
+			this.clearAnswers();
+		},
+		clearAnswers() {
+			this.answer1 = ' ';
+			this.answer2 = [' ', ' ', ' ', ' '];
+			this.answer5 = '';
+			this.answer6 = '';
 		}
 	}
 };

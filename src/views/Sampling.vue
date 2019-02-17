@@ -20,7 +20,7 @@
             />
           </v-flex>
           <v-flex>
-            <div class="placeholder"></div>
+            <div class="placeholder hidden-sm-and-down"/>
           </v-flex>
           <v-flex xs12>
             <check-box-group
@@ -53,33 +53,33 @@
 </template>
 
 <script>
-import THEMES from "@/constants/Themes";
-import YEARS from "@/constants/Years";
-import TYPES from "@/constants/Types";
-import ZNO_TYPES from "@/constants/ZnoTypes";
-import CheckBoxGroup from "../components/CheckBoxGroup.vue";
+import THEMES from '@/constants/Themes';
+import YEARS from '@/constants/Years';
+import TYPES from '@/constants/Types';
+import ZNO_TYPES from '@/constants/ZnoTypes';
+import CheckBoxGroup from '../components/CheckBoxGroup.vue';
 
 export default {
-  components: {
-    CheckBoxGroup
-  },
-  data() {
-    return {
-      THEMES,
-      TYPES,
-      ZNO_TYPES,
-      YEARS,
-      checkedYears: [],
-      checkedThemes: [],
-      checkedTypes: [],
-      checkedZnoTypes: []
-    };
-  }
+	components: {
+		CheckBoxGroup
+	},
+	data() {
+		return {
+			THEMES,
+			TYPES,
+			ZNO_TYPES,
+			YEARS,
+			checkedYears: [],
+			checkedThemes: [],
+			checkedTypes: [],
+			checkedZnoTypes: []
+		};
+	}
 };
 </script>
 <style scoped>
 .placeholder {
-  height: 3em;
+	height: 3em;
 }
 </style>
 
