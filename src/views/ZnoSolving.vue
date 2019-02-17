@@ -11,12 +11,13 @@
     >
       <Loader :loading="loading"/>
       <!-- Number block -->
-      <v-flex d-flex xs12 md10 lg9 class="card__wrapper">
-        <v-layout justify-center wrap>
-          <div v-for="n in tasks.length" :key="n" @click="changeTask(n)">
-            <div
-              v-ripple
-              :class="[
+      <v-flex d-flex xs12 md10 lg9>
+        <div class="card__wrapper">
+          <v-layout justify-center wrap class>
+            <div v-for="n in tasks.length" :key="n" @click="changeTask(n)">
+              <div
+                v-ripple
+                :class="[
                 {isActive: activeTask==n },
                 {number: true},
                 {isTrue: (userAnswersRight[n-1]==1 && showResult)},
@@ -24,31 +25,25 @@
                 {isFalse: ((userAnswersRight[n-1]==0) && showResult)},
                 {isAnswered: (userAnswersRight[n-1]>=0) && !showResult }
               ]"
-            >{{n}}</div>
-          </div>
-          <div v-if="showResult" @click="endTest">
-            <div
-              :class="[
+              >{{n}}</div>
+            </div>
+            <div v-if="showResult" @click="endTest">
+              <div
+                :class="[
                 { isActive: activeTask==tasks.length+1 },
                 {number: true}]"
-            >&#931;</div>
-          </div>
-        </v-layout>
+              >&#931;</div>
+            </div>
+          </v-layout>
+        </div>
       </v-flex>
       <!-- Number Block End-->
       <!-- Task Card -->
       <v-flex xs12 sm12 md10 lg9 v-if="activeTask<=tasks.length">
         <v-card class="card__wrapper">
-          <v-subheader>
-            <span>{{task.year}}&nbsp;</span>
-            <span v-if="task.zno_type==1 ">(Основна сесія)</span>
-            <span v-if="task.zno_type==2 ">(Пробне ЗНО)</span>
-            <span v-if="task.zno_type==3 ">(Додаткова сесія)</span>
-            <v-spacer/>
-            <span>Завдання {{task.number}} з {{tasks.length}}</span>
-          </v-subheader>
+          <zno-task-description v-bind="task" :length="tasks.length"/>
           <div>
-            <img :src="task.task_image " alt=" ">
+            <img :src="task.task_image " :alt="`${task.year}-${task.zno_type}.${task.number}`">
           </div>
           <div v-if="!showResult">
             <answer-block
@@ -102,22 +97,22 @@
 </template>
 
 <script>
-//import ZnoDescription from "../components/ZnoDescription.vue";
-import AnswerBlock from '../components/AnswerBlock.vue';
-import ZnoResult from '../components/ZnoResult.vue';
-import Loader from '../components/Loader.vue';
-import SolutionBlock from '../components/SolutionBlock.vue';
+import ZnoTaskDescription from '@/components/ZnoTaskDescription.vue';
+import AnswerBlock from '@/components/AnswerBlock.vue';
+import ZnoResult from '@/components/ZnoResult.vue';
+import Loader from '@/components/Loader.vue';
+import SolutionBlock from '@/components/SolutionBlock.vue';
 import { ROOT_URL } from '@/constants/Const';
 import ZnoScale from '@/constants/ZnoScale';
 import api from '@/api';
 
 export default {
 	components: {
-		//ZnoDescription,
 		AnswerBlock,
 		ZnoResult,
 		Loader,
-		SolutionBlock
+		SolutionBlock,
+		ZnoTaskDescription
 	},
 	data() {
 		return {
@@ -141,8 +136,7 @@ export default {
 		task() {
 			return {
 				...this.tasks[this.activeTask - 1],
-				index: this.activeTask - 1,
-				task_image: ROOT_URL + this.tasks[this.activeTask - 1].task_image
+				index: this.activeTask - 1
 			};
 		}
 	},
@@ -237,12 +231,14 @@ export default {
 		api.tasks
 			.getZno(this.$route.params.year, this.$route.params.znotype)
 			.then(res => {
-				this.tasks = res.data;
+				this.tasks = res.data.map(item => ({
+					...item,
+					task_image: ROOT_URL + item.task_image
+				}));
 				this.loading = false;
 				if (res.data.length == 0) this.$router.push({ name: 'Empty' });
 			});
 	},
-
 	beforeDestroy() {
 		clearTimeout(this.timer);
 		this.$store.commit('znoTimer/resetEndTime');

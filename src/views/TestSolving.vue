@@ -11,7 +11,7 @@
     >
       <Loader :loading="loading"/>
       <!--Number block-->
-      <v-flex d-flex xs12 md10 lg9 class="card__wrapper">
+      <v-flex d-flex xs12 md10 lg9>
         <v-layout justify-center wrap>
           <div v-if="this.tasks.length>pageSize" @click="prevPage">
             <div
@@ -55,31 +55,21 @@
         </v-layout>
       </v-flex>
       <!--Number block End-->
-      <v-flex
-        xs12
-        sm12
-        md10
-        lg9
-        v-for="(task, index) in tasks"
-        v-if="activeTask==index+1"
-        :key="task.key"
-      >
+      <v-flex xs12 sm12 md10 lg9>
         <v-card class="card__wrapper">
-          <v-subheader>
-            <task-description :index="index+1" :task="task"/>
-          </v-subheader>
+          <task-description v-bind="task"/>
           <div>
             <img :src="task.task_image" alt>
           </div>
           <answer-block
-            v-if="userAnswersValue[index]===undefined"
-            @checkAnswer="checkSolving($event, index)"
+            v-if="userAnswersValue[task.index]===undefined"
+            @checkAnswer="checkSolving($event, task.index)"
             :answer="task.correct_answer"
             :type="task.type"
           ></answer-block>
           <solution-block
-            :user-answer="userAnswersValue[index]"
-            :user-answer-right="userAnswersRight[index]"
+            :user-answer="userAnswersValue[task.index]"
+            :user-answer-right="userAnswersRight[task.index]"
             :correct-answer="task.correct_answer"
           />
         </v-card>
@@ -164,6 +154,12 @@ export default {
 		},
 		userId() {
 			return this.$store.state.auth.user.pk;
+		},
+		task() {
+			return {
+				...this.tasks[this.activeTask - 1],
+				index: this.activeTask - 1
+			};
 		}
 	},
 	methods: {
@@ -234,7 +230,6 @@ export default {
 		} else {
 			api.tasks
 				.getTasks(
-					//переписать на хук креатед
 					this.checkQuery(this.$route.query.years),
 					this.checkQuery(this.$route.query.themes),
 					this.checkQuery(this.$route.query.types),
