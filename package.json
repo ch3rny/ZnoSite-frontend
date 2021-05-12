@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@vue/eslint-config-prettier": "^4.0.1",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "epic-spinners": "^1.0.4",
     "inflected": "^2.0.4",
     "jwt-decode": "^2.2.0",
