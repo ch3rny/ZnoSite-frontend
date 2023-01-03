@@ -27,7 +27,7 @@
     "@vue/cli-plugin-babel": "^3.2.2",
     "@vue/cli-plugin-eslint": "^3.2.2",
     "@vue/cli-plugin-pwa": "^3.2.2",
-    "@vue/cli-service": "^3.2.3",
+    "@vue/cli-service": "^5.0.8",
     "axios": "^0.18.0",
     "vue-cli-plugin-axios": "0.0.4",
     "vue-cli-plugin-vuetify": "^0.1.6",
